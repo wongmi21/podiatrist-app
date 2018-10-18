@@ -1,24 +1,37 @@
 import React from 'react';
-import Drawer from '@material-ui/core/Drawer';
-import List from "@material-ui/core/List";
-import MenuItem from "@material-ui/core/MenuItem";
-import Typography from "@material-ui/core/Typography";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import {toggleAuth} from './actions';
+import connect from 'react-redux/es/connect/connect';
+import {withRouter} from 'react-router';
+import {Button} from 'antd';
 
-export default class App extends React.Component {
-    handleDrawerOpen;
-    menuButton;
-  render() {
-    return (
-        <div>
-            <Drawer variant="permanent">
-                <List>
-                    <ListSubheader><Typography variant="title">Podiatrist App</Typography></ListSubheader>
-                    <MenuItem>Home</MenuItem>
-                    <MenuItem>Patients</MenuItem>
-                </List>
-            </Drawer>
-        </div>
-    );
-  }
+class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    handleClick() {
+        this.props.logout();
+        this.props.history.push('/login');
+    }
+
+    render() {
+        return (
+            <Button type='primary' onClick={() => this.handleClick()}>Log Out</Button>
+        );
+    }
 }
+
+const mapStateToProps = state => {
+    return {
+        auth: state.auth
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(toggleAuth(false))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
