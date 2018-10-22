@@ -6,10 +6,6 @@ import {Button} from 'antd';
 
 class App extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     handleClick() {
         this.props.logout();
         this.props.history.push('/login');

@@ -6,6 +6,10 @@
     transform: translate(-50%, -50%);
 }
 
+.login-form-forgot {
+    float: right;
+}
+
 .login-form-button {
     width: 100%;
 }

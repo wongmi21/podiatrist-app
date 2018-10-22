@@ -2,15 +2,11 @@ import React from 'react'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {toggleAuth} from './actions';
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, Checkbox} from 'antd';
 
 import './css/LoginPage.css'
 
 class LoginPage extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     handleSubmit() {
         this.props.login();
@@ -28,7 +24,10 @@ class LoginPage extends React.Component {
                         <Input type='password' placeholder='Password'/>
                     </Form.Item>
                     <Form.Item>
+                        <Checkbox>Remember me</Checkbox>
+                        <a className="login-form-forgot" href="">Forgot password</a>
                         <Button type='primary' htmlType='submit' className='login-form-button'>Log In</Button>
+                        Or <a href="/register">register now!</a>
                     </Form.Item>
                 </Form>
             </div>

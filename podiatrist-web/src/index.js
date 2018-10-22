@@ -21,13 +21,12 @@ const RedirectRoute = ({ component: Component, redirect, ...rest }) => (
                 state: { from: props.location }
             }} />
     )} />
-)
+);
 
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
             <div>
-                <Redirect from='*' to='/app' />
                 <Route path='/login' component={LoginPage} />
                 <RedirectRoute path='/app' redirect='/login' component={App} />
             </div>
