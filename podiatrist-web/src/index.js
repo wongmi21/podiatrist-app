@@ -8,6 +8,7 @@ import rootReducer from './reducers';
 import {Provider} from 'react-redux';
 
 import 'antd/dist/antd.css';
+import RegisterPage from "./RegisterPage";
 
 
 const store = createStore(rootReducer);
@@ -28,6 +29,7 @@ ReactDOM.render(
         <BrowserRouter>
             <div>
                 <Route path='/login' component={LoginPage} />
+                <Route path='/register' component={RegisterPage} />
                 <RedirectRoute path='/app' redirect='/login' component={App} />
             </div>
         </BrowserRouter>

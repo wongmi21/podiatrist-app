@@ -2,33 +2,36 @@ import React from 'react'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {toggleAuth} from './actions';
-import {Form, Input, Button, Checkbox} from 'antd';
+import {Form, Input, Button} from 'antd';
 
-import './css/LoginPage.css'
+import './css/RegisterPage.css'
 
-class LoginPage extends React.Component {
+class RegisterPage extends React.Component {
 
     handleSubmit() {
-        this.props.login();
-        this.props.history.push('/app');
+        // TODO
     }
 
     render() {
         return (
-            <div className='login-form-container'>
-                <h1>Log In</h1>
+            <div className='register-form-container'>
+                <h1>Register</h1>
                 <Form onSubmit={() => this.handleSubmit()}>
                     <Form.Item>
+                        <Input placeholder='Full Name'/>
+                    </Form.Item>
+                    <Form.Item>
                         <Input placeholder='Username'/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Input placeholder='Email'/>
                     </Form.Item>
                     <Form.Item>
                         <Input type='password' placeholder='Password'/>
                     </Form.Item>
                     <Form.Item>
-                        <Checkbox>Remember me</Checkbox>
-                        <a className="login-form-forgot" href="">Forgot password</a>
-                        <Button type='primary' htmlType='submit' className='login-form-button'>Log In</Button>
-                        Or <a href="/register">register now!</a>
+                        <Button type='primary' htmlType='submit' className='register-form-button'>Register</Button>
+                        Already registered? <a href="/login">Login now!</a>
                     </Form.Item>
                 </Form>
             </div>
@@ -49,4 +52,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RegisterPage));
