@@ -1,77 +1,93 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {toggleAuth} from './actions';
 import {Form, Input, Button, notification, Icon} from 'antd';
 
 import './css/LoginPage.css'
+import {ACCESS_TOKEN} from "./constants";
+import {login} from "./util/APIUtils";
+
+const FormItem = Form.Item;
 
 class LoginPage extends React.Component {
+    render() {
+        const AntWrappedLoginForm = Form.create()(LoginForm)
+        return (
+            <div className="login-container">
+                <h1 className="page-title">Login</h1>
+                <div className="login-content">
+                    <AntWrappedLoginForm onLogin={this.props.onLogin} />
+                </div>
+            </div>
+        );
+    }
+}
 
+class LoginForm extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            username: null,
-            password: null
-        };
-
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleInputChange(e) {
-        this.setState({[e.target.name]: e.target.value});
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        fetch("http://localhost:8080/api/auth/signin", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({usernameOrEmail: this.state.username, password: this.state.password})
-        })
-            .then(response => response.json())
-            .then(
-                json => {
-                    console.log(json);
-                    if (json.accessToken) {
-                        notification.success({
-                            message: 'Login Successful',
-                            description: "Welcome " + this.state.username + "!",
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                const loginRequest = Object.assign({}, values);
+                login(loginRequest)
+                    .then(response => {
+                        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+                        this.props.onLogin();
+                    }).catch(error => {
+                    if(error.status === 401) {
+                        notification.error({
+                            message: 'Podiatrist App',
+                            description: 'Your Username or Password is incorrect. Please try again!'
                         });
-                        this.props.toggleAuth(true);
-                        this.props.history.push('/app');
                     } else {
                         notification.error({
-                            message: json.error,
-                            description: json.message,
+                            message: 'Podiatrist App',
+                            description: error.message || 'Sorry! Something went wrong. Please try again!'
                         });
                     }
                 });
+            }
+        });
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
-            <div className='login-form-container'>
-                <h1>Log In</h1>
-                <Form onSubmit={this.handleSubmit}>
-                    <Form.Item>
-                        <Input prefix={<Icon type="user" />} placeholder='Username or Email' name='username' value={this.state.username}
-                               onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Input prefix={<Icon type="lock" />} type='password' placeholder='Password' name='password' value={this.state.password}
-                               onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type='primary' htmlType='submit' className='login-form-button'>Log In</Button>
-                        Or <a href="/register">register now!</a>
-                    </Form.Item>
-                </Form>
-            </div>
+            <Form onSubmit={this.handleSubmit} className="login-form">
+                <FormItem>
+                    {getFieldDecorator('usernameOrEmail', {
+                        rules: [{ required: true, message: 'Please input your username or email!' }],
+                    })(
+                        <Input
+                            prefix={<Icon type="user" />}
+                            size="large"
+                            name="usernameOrEmail"
+                            placeholder="Username or Email" />
+                    )}
+                </FormItem>
+                <FormItem>
+                    {getFieldDecorator('password', {
+                        rules: [{ required: true, message: 'Please input your Password!' }],
+                    })(
+                        <Input
+                            prefix={<Icon type="lock" />}
+                            size="large"
+                            name="password"
+                            type="password"
+                            placeholder="Password"  />
+                    )}
+                </FormItem>
+                <FormItem>
+                    <Button type="primary" htmlType="submit" size="large" className="login-form-button">Login</Button>
+                    Or <Link to="/register">register now!</Link>
+                </FormItem>
+            </Form>
         );
     }
 }

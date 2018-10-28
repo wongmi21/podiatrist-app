@@ -1,5 +1,5 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {toggleAuth} from './actions';
 import {Form, Input, Button, notification} from 'antd';
@@ -124,7 +124,7 @@ class RegisterPage extends React.Component {
                     </Form.Item>
                     <Form.Item>
                         <Button type='primary' htmlType='submit' className='register-form-button'>Register</Button>
-                        Already registered? <a href="/login">Login now!</a>
+                        Already registered? <Link to="/login">Login now!</Link>
                     </Form.Item>
                 </Form>
             </div>
