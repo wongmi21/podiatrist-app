@@ -2,18 +2,16 @@ import React from 'react';
 import {toggleAuth} from './actions';
 import connect from 'react-redux/es/connect/connect';
 import {withRouter} from 'react-router';
-import {Button} from 'antd';
+import {Layout} from 'antd';
 
 class App extends React.Component {
 
-    handleClick() {
-        this.props.logout();
-        this.props.history.push('/login');
-    }
-
     render() {
         return (
-            <Button type='primary' onClick={() => this.handleClick()}>Log Out</Button>
+            <Layout>
+                <Layout>Header</Layout>
+                <Layout>Content</Layout>
+            </Layout>
         );
     }
 }
