@@ -1,0 +1,15 @@
+.logo {
+    height: 32px;
+    background: rgba(255, 255, 255, .2);
+    margin: 16px;
+}
+
+.layout-sider {
+    height: 100vh;
+    overflow: auto;
+    position: fixed;
+    left: 0;
+}
+.layout-content {
+    margin-left: 200px;
+}

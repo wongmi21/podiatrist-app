@@ -36,7 +36,8 @@ class App extends React.Component {
             <Switch>
                 <Route path="/login" component={LoginPage}/>
                 <Route path='/register' component={RegisterPage}/>
-                <PrivateRoute authenticated={this.props.isAuthenticated} path="/" component={MainPage}/>
+                {/* <PrivateRoute authenticated={this.props.isAuthenticated} path="/" component={MainPage}/> */}
+                <Route path='/' component={MainPage}/>
             </Switch>
         );
     }
