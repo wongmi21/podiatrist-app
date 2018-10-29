@@ -4,86 +4,44 @@ import {connect} from 'react-redux';
 import {Button, Icon, Layout, Menu, Table} from "antd";
 
 import './css/MainPage.css'
+import {getAllPatientData} from "./util/APIUtils";
 
 const {Sider, Content} = Layout;
-
-const dataSource = [{
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street'
-}, {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '3',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '4',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '5',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '6',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '7',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '8',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '9',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '10',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '11',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}, {
-    key: '12',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street'
-}];
 
 const columns = [{
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
 }, {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: 'NRIC',
+    dataIndex: 'nric',
+    key: 'nric',
 }, {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    title: 'Phone Number',
+    dataIndex: 'phoneNumber',
+    key: 'phoneNumber',
 }];
 
 class MainPage extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            dataSource: []
+        };
+    }
+
+    componentDidMount() {
+        getAllPatientData()
+            .then(response => {
+                this.setState({
+                    dataSource: response
+                });
+                console.log(response);
+            }).catch(error => {
+                console.log(error);
+        });
+    }
 
     render() {
         return (
@@ -103,7 +61,7 @@ class MainPage extends React.Component {
                 </Sider>
                 <Layout>
                     <Content className='layout-content'>
-                        <Table dataSource={dataSource} columns={columns} pagination={{pageSize: Math.floor((Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 197)/54)}}/>
+                        <Table dataSource={this.state.dataSource} columns={columns} pagination={{pageSize: Math.floor((Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 197)/54)}}/>
                         <Button type="primary" icon="user-add">Add User</Button>
                     </Content>
                 </Layout>

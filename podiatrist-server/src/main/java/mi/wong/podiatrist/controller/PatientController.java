@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,6 +25,16 @@ public class PatientController {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @GetMapping("/patient/all")
+    public List<PatientInfo> getAllPatientData() {
+        List<Patient> patients = patientRepository.findAll();
+        List<PatientInfo> patientData = new ArrayList<>();
+        for (Patient patient : patients) {
+            patientData.add(new PatientInfo(patient));
+        }
+        return patientData;
+    }
 
     @GetMapping("/patient/info")
     public PatientInfo getPatientInfo(@RequestParam(value = "nric") String nric) {

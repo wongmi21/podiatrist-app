@@ -7,11 +7,13 @@ public class PatientInfo {
     private Long id;
     private String name;
     private String nric;
+    private String phoneNumber;
 
     public PatientInfo(Patient patient) {
         this.id = patient.getId();
         this.name = patient.getName();
         this.nric = patient.getNric();
+        this.phoneNumber = patient.getPhoneNumber();
     }
 
     public Long getId() {
@@ -20,6 +22,10 @@ public class PatientInfo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getKey() {
+        return Long.toString(id);
     }
 
     public String getName() {
@@ -36,5 +42,13 @@ public class PatientInfo {
 
     public void setNric(String nric) {
         this.nric = nric;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

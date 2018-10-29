@@ -65,9 +65,9 @@ export function getCurrentUser() {
     });
 }
 
-export function getUserProfile(username) {
+export function getAllPatientData() {
     return request({
-        url: API_BASE_URL + "/users/" + username,
+        url: API_BASE_URL + "/patient/all",
         method: 'GET'
     });
 }
