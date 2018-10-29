@@ -1,11 +1,87 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {Icon, Layout, Menu} from "antd";
+import {Button, Icon, Layout, Menu, Table} from "antd";
 
 import './css/MainPage.css'
 
 const {Sider, Content} = Layout;
+
+const dataSource = [{
+    key: '1',
+    name: 'Mike',
+    age: 32,
+    address: '10 Downing Street'
+}, {
+    key: '2',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '3',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '4',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '5',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '6',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '7',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '8',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '9',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '10',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '11',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}, {
+    key: '12',
+    name: 'John',
+    age: 42,
+    address: '10 Downing Street'
+}];
+
+const columns = [{
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+}, {
+    title: 'Age',
+    dataIndex: 'age',
+    key: 'age',
+}, {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+}];
 
 class MainPage extends React.Component {
 
@@ -17,27 +93,20 @@ class MainPage extends React.Component {
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                         <Menu.Item key="1">
                             <Icon type="team" />
-                            <span className="nav-text">List Patients</span>
+                            <span className="nav-text">Patients</span>
                         </Menu.Item>
                         <Menu.Item key="2">
-                            <Icon type="user-add" />
-                            <span className="nav-text">Add Patient</span>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <Icon type="edit" />
-                            <span className="nav-text">Edit Patient Info</span>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <Icon type="user-delete" />
-                            <span className="nav-text">Delete Patient</span>
-                        </Menu.Item>
-                        <Menu.Item key="5">
                             <Icon type="setting" />
                             <span className="nav-text">User Management</span>
                         </Menu.Item>
                     </Menu>
                 </Sider>
-                <Content className='layout-content'>Content</Content>
+                <Layout>
+                    <Content className='layout-content'>
+                        <Table dataSource={dataSource} columns={columns} pagination={{pageSize: Math.floor((Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 197)/54)}}/>
+                        <Button type="primary" icon="user-add">Add User</Button>
+                    </Content>
+                </Layout>
             </Layout>
         );
     }

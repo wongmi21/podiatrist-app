@@ -4,12 +4,16 @@
     margin: 16px;
 }
 
+.layout-container {
+    height: 100vh;
+}
+
 .layout-sider {
     height: 100vh;
-    overflow: auto;
     position: fixed;
     left: 0;
 }
+
 .layout-content {
-    margin-left: 200px;
+    margin: 16px 16px 16px 216px;
 }
