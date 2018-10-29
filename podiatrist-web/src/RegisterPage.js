@@ -1,7 +1,5 @@
 import React from 'react'
 import {Link, withRouter} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {toggleAuth} from './actions';
 import {Form, Input, Button, notification} from 'antd';
 
 import './css/RegisterPage.css'
@@ -328,16 +326,4 @@ class RegisterPage extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        auth: state.auth
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        login: () => dispatch(toggleAuth(true))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RegisterPage));
+export default withRouter(RegisterPage);

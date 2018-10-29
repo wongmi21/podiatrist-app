@@ -1,12 +1,14 @@
 const initialState = {
-    auth: false
+    currentUser: null,
+    isAuthenticated: false
 };
 
 export default function app(state = initialState, action) {
     switch (action.type) {
-        case 'TOGGLE_AUTH':
+        case 'LOGIN':
             return Object.assign({}, state, {
-                auth: action.auth
+                currentUser: action.currentUser,
+                isAuthenticated: action.isAuthenticated
             });
         default:
             return state;

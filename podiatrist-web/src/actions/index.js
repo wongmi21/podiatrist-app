@@ -1,4 +1,5 @@
-export const toggleAuth = auth => ({
-    type: 'TOGGLE_AUTH',
-    auth: auth
+export const login = (currentUser, isAuthenticated) => ({
+    type: 'LOGIN',
+    currentUser: currentUser,
+    isAuthenticated: isAuthenticated
 });

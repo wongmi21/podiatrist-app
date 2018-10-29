@@ -1,23 +1,65 @@
 import React from 'react'
 import {Link, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {toggleAuth} from './actions';
+import {login} from './actions';
 import {Form, Input, Button, notification, Icon} from 'antd';
 
 import './css/LoginPage.css'
 import {ACCESS_TOKEN} from "./constants";
-import {login} from "./util/APIUtils";
+import {getCurrentUser, apiLogin} from "./util/APIUtils";
 
 const FormItem = Form.Item;
 
 class LoginPage extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currentUser: null,
+            isAuthenticated: false,
+            isLoading: false
+        };
+
+        this.loadCurrentUser = this.loadCurrentUser.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
+    }
+
+    loadCurrentUser() {
+        this.setState({
+            isLoading: true
+        });
+        getCurrentUser()
+            .then(response => {
+                this.setState({
+                    currentUser: response,
+                    isAuthenticated: true,
+                    isLoading: false
+                });
+                this.props.login(response, true);
+                this.props.history.push("/");
+            }).catch(error => {
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
+
+    handleLogin() {
+        notification.success({
+            message: 'Podiatrist App',
+            description: "You're successfully logged in.",
+        });
+        this.loadCurrentUser();
+    }
+
     render() {
         const AntWrappedLoginForm = Form.create()(LoginForm)
         return (
             <div className="login-container">
                 <h1 className="page-title">Login</h1>
                 <div className="login-content">
-                    <AntWrappedLoginForm onLogin={this.props.onLogin} />
+                    <AntWrappedLoginForm onLogin={this.handleLogin} />
                 </div>
             </div>
         );
@@ -25,6 +67,7 @@ class LoginPage extends React.Component {
 }
 
 class LoginForm extends React.Component {
+
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +78,7 @@ class LoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const loginRequest = Object.assign({}, values);
-                login(loginRequest)
+                apiLogin(loginRequest)
                     .then(response => {
                         localStorage.setItem(ACCESS_TOKEN, response.accessToken);
                         this.props.onLogin();
@@ -92,17 +135,10 @@ class LoginForm extends React.Component {
     }
 }
 
-
-const mapStateToProps = state => {
-    return {
-        auth: state.auth
-    };
-};
-
 const mapDispatchToProps = dispatch => {
     return {
-        toggleAuth: (auth) => dispatch(toggleAuth(auth))
+        login: (currentUser, isAuthenticated) => dispatch(login(currentUser, isAuthenticated))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginPage));
+export default connect(null, mapDispatchToProps)(withRouter(LoginPage));

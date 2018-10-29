@@ -23,7 +23,7 @@ const request = (options) => {
         );
 };
 
-export function login(loginRequest) {
+export function apiLogin(loginRequest) {
     return request({
         url: API_BASE_URL + "/auth/signin",
         method: 'POST',
