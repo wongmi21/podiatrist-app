@@ -8,20 +8,6 @@ import {addPatient, getAllPatientData} from "./util/APIUtils";
 
 const {Sider, Content} = Layout;
 
-const columns = [{
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-}, {
-    title: 'NRIC',
-    dataIndex: 'nric',
-    key: 'nric',
-}, {
-    title: 'Sex',
-    dataIndex: 'sex',
-    key: 'sex',
-}];
-
 class MainPage extends React.Component {
 
     constructor(props) {
@@ -90,7 +76,104 @@ class MainPage extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
+    handleSearch = (selectedKeys, confirm) => () => {
+        confirm();
+        this.setState({ searchText: selectedKeys[0] });
+    };
+
+    handleReset = clearFilters => () => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
     render() {
+        const columns = [{
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+            sorter: (a, b) => a.id - b.id
+        }, {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a, b) => { return a.name.localeCompare(b.name)},
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div className="custom-filter-dropdown">
+                    <Input
+                        ref={ele => this.searchInput = ele}
+                        placeholder="Search name"
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={this.handleSearch(selectedKeys, confirm)}
+                    />
+                    <Button type="primary" onClick={this.handleSearch(selectedKeys, confirm)}>Search</Button>
+                    <Button onClick={this.handleReset(clearFilters)}>Reset</Button>
+                </div>
+            ),
+            filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#108ee9' : '#aaa' }} />,
+            onFilter: (value, record) => record.name.toLowerCase().includes(value.toLowerCase()),
+            onFilterDropdownVisibleChange: (visible) => {
+                if (visible) {
+                    setTimeout(() => {
+                        this.searchInput.focus();
+                    });
+                }
+            },
+            render: (text) => {
+                const { searchText } = this.state;
+                return searchText ? (
+                    <span>
+                {text.split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')).map((fragment, i) => (
+                    fragment.toLowerCase() === searchText.toLowerCase()
+                        ? <span key={i} className="highlight">{fragment}</span> : fragment // eslint-disable-line
+                ))}
+              </span>
+                ) : text;
+            }
+        }, {
+            title: 'NRIC',
+            dataIndex: 'nric',
+            key: 'nric',
+            sorter: (a, b) => { return a.nric.localeCompare(b.nric)},
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div className="custom-filter-dropdown">
+                    <Input
+                        ref={ele => this.searchInput = ele}
+                        placeholder="Search NRIC"
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={this.handleSearch(selectedKeys, confirm)}
+                    />
+                    <Button type="primary" onClick={this.handleSearch(selectedKeys, confirm)}>Search</Button>
+                    <Button onClick={this.handleReset(clearFilters)}>Reset</Button>
+                </div>
+            ),
+            filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#108ee9' : '#aaa' }} />,
+            onFilter: (value, record) => record.nric.toLowerCase().includes(value.toLowerCase()),
+            onFilterDropdownVisibleChange: (visible) => {
+                if (visible) {
+                    setTimeout(() => {
+                        this.searchInput.focus();
+                    });
+                }
+            },
+            render: (text) => {
+                const { searchText } = this.state;
+                return searchText ? (
+                    <span>
+                {text.split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')).map((fragment, i) => (
+                    fragment.toLowerCase() === searchText.toLowerCase()
+                        ? <span key={i} className="highlight">{fragment}</span> : fragment // eslint-disable-line
+                ))}
+              </span>
+                ) : text;
+            }
+        }, {
+            title: 'Sex',
+            dataIndex: 'sex',
+            key: 'sex',
+        }];
+
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
