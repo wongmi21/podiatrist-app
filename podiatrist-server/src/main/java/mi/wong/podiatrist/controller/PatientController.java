@@ -80,6 +80,7 @@ public class PatientController {
         patient.setName(editPatientRequest.getName());
         patient.setNric(editPatientRequest.getNric());
         patient.setSex(editPatientRequest.getSex());
+        patient.setDateOfBirth(editPatientRequest.getDateOfBirth());
         patient.setPhoneNumber(editPatientRequest.getPhoneNumber());
         patient.setEmail(editPatientRequest.getEmail());
         patient.setAddress(editPatientRequest.getAddress());

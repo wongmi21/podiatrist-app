@@ -2,10 +2,23 @@ import React from 'react';
 
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {notification, Button, Input, Form} from "antd";
+import {notification, Button, Input, Form, DatePicker} from "antd";
 import {editPatient, getPatientData} from "./util/APIUtils";
 
 import './css/EditPatientPage.css';
+import moment from "moment";
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('');
+}
 
 class EditPatientPage extends React.Component {
 
@@ -17,6 +30,7 @@ class EditPatientPage extends React.Component {
             name: null,
             nric: null,
             sex: null,
+            dateOfBirth: null,
             phoneNumber: null,
             email: null,
             address: null,
@@ -27,6 +41,7 @@ class EditPatientPage extends React.Component {
             shoeSize: null
         };
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -39,6 +54,7 @@ class EditPatientPage extends React.Component {
                     name: response.name,
                     nric: response.nric,
                     sex: response.sex,
+                    dateOfBirth: response.dateOfBirth,
                     phoneNumber: response.phoneNumber,
                     email: response.email,
                     address: response.address,
@@ -58,6 +74,14 @@ class EditPatientPage extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
+    handleDateChange(e) {
+        if (e) {
+            this.setState({dateOfBirth: formatDate(e._d)});
+        } else {
+            this.setState({dateOfBirth: 20000101});
+        }
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         editPatient({
@@ -66,6 +90,7 @@ class EditPatientPage extends React.Component {
             name: this.state.name,
             nric: this.state.nric,
             sex: this.state.sex,
+            dateOfBirth: this.state.dateOfBirth,
             phoneNumber: this.state.phoneNumber,
             email: this.state.email,
             address: this.state.address,
@@ -97,92 +122,96 @@ class EditPatientPage extends React.Component {
         };
 
         return (
-            <div>
-                <Form onSubmit={this.handleSubmit}>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="ID"
-                    >
-                        <Input name='id' disabled value={this.state.id} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Patient ID"
-                    >
-                        <Input name='pid' value={this.state.pid} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Name"
-                    >
-                        <Input name='name' value={this.state.name} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="NRIC"
-                    >
-                        <Input name='nric' value={this.state.nric} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Sex"
-                    >
-                        <Input name='sex' value={this.state.sex} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Phone Number"
-                    >
-                        <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="E-mail"
-                    >
-                        <Input name='email' value={this.state.email} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Address"
-                    >
-                        <Input name='address' value={this.state.address} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Postal Code"
-                    >
-                        <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Occupation"
-                    >
-                        <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Height (cm)"
-                    >
-                        <Input name='height' value={this.state.height} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Weight (kg)"
-                    >
-                        <Input name='weight' value={this.state.weight} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item
-                        {...formItemLayout}
-                        label="Shoe Size"
-                    >
-                        <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Link to='/patients'><Button>Back</Button></Link>
-                        <Button type="primary" htmlType="submit" className='save-button'>Save</Button>
-                    </Form.Item>
-                </Form>
-            </div>
+            <Form onSubmit={this.handleSubmit}>
+                <Form.Item
+                    {...formItemLayout}
+                    label="ID"
+                >
+                    <Input name='id' disabled value={this.state.id} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Patient ID"
+                >
+                    <Input name='pid' value={this.state.pid} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Name"
+                >
+                    <Input name='name' value={this.state.name} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="NRIC"
+                >
+                    <Input name='nric' value={this.state.nric} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Sex"
+                >
+                    <Input name='sex' value={this.state.sex} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Date of Birth"
+                >
+                    <DatePicker value={moment(String(this.state.dateOfBirth).replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'), 'YYYY-MM-DD')} onChange={this.handleDateChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Phone Number"
+                >
+                    <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="E-mail"
+                >
+                    <Input name='email' value={this.state.email} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Address"
+                >
+                    <Input name='address' value={this.state.address} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Postal Code"
+                >
+                    <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Occupation"
+                >
+                    <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Height (cm)"
+                >
+                    <Input name='height' value={this.state.height} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Weight (kg)"
+                >
+                    <Input name='weight' value={this.state.weight} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Shoe Size"
+                >
+                    <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item>
+                    <Link to='/patients'><Button>Back</Button></Link>
+                    <Button type="primary" htmlType="submit" className='save-button'>Save</Button>
+                </Form.Item>
+            </Form>
         );
     }
 }
