@@ -42,7 +42,7 @@ class RegisterPage extends React.Component {
 
     handleInputChange(event, validationFun) {
         const target = event.target;
-        const inputName = target.name;
+        const inputName = target.addPatientName;
         const inputValue = target.value;
 
         this.setState({
@@ -57,7 +57,7 @@ class RegisterPage extends React.Component {
         event.preventDefault();
 
         const signupRequest = {
-            name: this.state.name.value,
+            addPatientName: this.state.name.value,
             email: this.state.email.value,
             username: this.state.username.value,
             password: this.state.password.value

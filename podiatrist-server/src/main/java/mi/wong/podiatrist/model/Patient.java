@@ -15,15 +15,16 @@ public class Patient {
     private Long id;
     private String name;
     private String nric;
-    private String phoneNumber;
+    private Integer dateOfBirth;
+    private String sex;
 
     public Patient() {
     }
 
-    public Patient(String name, String nric, String phoneNumber) {
+    public Patient(String name, String nric, String sex) {
         this.name = name;
         this.nric = nric;
-        this.phoneNumber = phoneNumber;
+        this.sex = sex;
     }
 
     public Long getId() {
@@ -50,11 +51,19 @@ public class Patient {
         this.nric = nric;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public Integer getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setDateOfBirth(Integer dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

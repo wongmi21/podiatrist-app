@@ -54,7 +54,7 @@ class LoginPage extends React.Component {
     }
 
     render() {
-        const AntWrappedLoginForm = Form.create()(LoginForm)
+        const AntWrappedLoginForm = Form.create()(LoginForm);
         return (
             <div className="login-container">
                 <h1 className="page-title">Login</h1>

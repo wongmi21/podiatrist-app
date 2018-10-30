@@ -1,10 +1,10 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {Button, Icon, Layout, Menu, Table} from "antd";
+import {Button, Form, Icon, Input, Layout, Menu, Modal, notification, Radio, Table} from "antd";
 
 import './css/MainPage.css'
-import {getAllPatientData} from "./util/APIUtils";
+import {addPatient, getAllPatientData} from "./util/APIUtils";
 
 const {Sider, Content} = Layout;
 
@@ -17,33 +17,88 @@ const columns = [{
     dataIndex: 'nric',
     key: 'nric',
 }, {
-    title: 'Phone Number',
-    dataIndex: 'phoneNumber',
-    key: 'phoneNumber',
+    title: 'Sex',
+    dataIndex: 'sex',
+    key: 'sex',
 }];
 
 class MainPage extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
-            dataSource: []
+            dataSource: [],
+            addPatientModalLoading: false,
+            addPatientModalVisible: false,
+            addPatientName: null,
+            addPatientNric: null,
+            addPatientSex: null
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    componentDidMount() {
+    updateDataSource() {
         getAllPatientData()
             .then(response => {
                 this.setState({
                     dataSource: response
                 });
-                console.log(response);
             }).catch(error => {
-                console.log(error);
+            console.log(error);
         });
     }
 
+    componentDidMount() {
+        this.updateDataSource();
+    }
+
+    showModal = () => {
+        this.setState({
+            addPatientModalVisible: true,
+        });
+    };
+
+    handleOk = () => {
+        this.setState({ addPatientModalLoading: true });
+        addPatient({name: this.state.addPatientName, nric: this.state.addPatientNric, sex: this.state.addPatientSex})
+            .then(response => {
+                notification.success({
+                    message: 'Podiatrist App',
+                    description: "Patient " + this.state.addPatientName + " added!",
+                });
+                this.setState({
+                    addPatientName: null,
+                    addPatientNric: null,
+                    addPatientModalLoading: false,
+                    addPatientModalVisible: false
+                });
+                this.updateDataSource();
+            }).catch(error => {
+                console.log(error);
+        });
+    };
+
+    handleCancel = () => {
+        this.setState({ addPatientModalVisible: false });
+    };
+
+    handleInputChange(e) {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
     render() {
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 8 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+        };
         return (
             <Layout className='layout-container'>
                 <Sider className='layout-sider'>
@@ -62,7 +117,54 @@ class MainPage extends React.Component {
                 <Layout>
                     <Content className='layout-content'>
                         <Table dataSource={this.state.dataSource} columns={columns} pagination={{pageSize: Math.floor((Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - 197)/54)}}/>
-                        <Button type="primary" icon="user-add">Add User</Button>
+                        <Button type="primary" icon="user-add" onClick={this.showModal}>Add Patient</Button>
+                        <Modal
+                            title="Add Patient"
+                            centered
+                            visible={this.state.addPatientModalVisible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleCancel}
+                            footer={[
+                                <Button key="back" onClick={this.handleCancel}>Cancel</Button>,
+                                <Button key="submit" type="primary" loading={this.state.addPatientModalLoading} onClick={this.handleOk}>
+                                    Submit
+                                </Button>,
+                            ]}
+                        >
+                            <Form>
+                                <Form.Item
+                                    {...formItemLayout}
+                                    label="Name"
+                                >
+                                    <Input
+                                        size="large"
+                                        name="addPatientName"
+                                        placeholder="Full Name"
+                                        value={this.state.addPatientName}
+                                        onChange={this.handleInputChange} />
+                                </Form.Item>
+                                <Form.Item
+                                    {...formItemLayout}
+                                    label="NRIC"
+                                >
+                                    <Input
+                                        size="large"
+                                        name="addPatientNric"
+                                        placeholder="NRIC"
+                                        value={this.state.addPatientNric}
+                                        onChange={this.handleInputChange} />
+                                </Form.Item>
+                                <Form.Item
+                                    {...formItemLayout}
+                                    label="Sex"
+                                >
+                                    <Radio.Group name='addPatientSex' defaultValue="M" buttonStyle="solid" onChange={this.handleInputChange}>
+                                        <Radio.Button value="M">Male</Radio.Button>
+                                        <Radio.Button value="F">Female</Radio.Button>
+                                    </Radio.Group>
+                                </Form.Item>
+                            </Form>
+                        </Modal>
                     </Content>
                 </Layout>
             </Layout>

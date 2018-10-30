@@ -2,18 +2,20 @@ package mi.wong.podiatrist.payload;
 
 import mi.wong.podiatrist.model.Patient;
 
-public class PatientInfo {
+public class PatientSummary {
 
     private Long id;
     private String name;
     private String nric;
-    private String phoneNumber;
+    private String sex;
+    private Integer dateOfBirth;
 
-    public PatientInfo(Patient patient) {
+    public PatientSummary(Patient patient) {
         this.id = patient.getId();
         this.name = patient.getName();
         this.nric = patient.getNric();
-        this.phoneNumber = patient.getPhoneNumber();
+        this.sex = patient.getSex();
+        this.dateOfBirth = patient.getDateOfBirth();
     }
 
     public Long getId() {
@@ -44,11 +46,19 @@ public class PatientInfo {
         this.nric = nric;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getSex() {
+        return sex;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Integer getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Integer dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

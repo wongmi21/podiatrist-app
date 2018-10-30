@@ -71,3 +71,11 @@ export function getAllPatientData() {
         method: 'GET'
     });
 }
+
+export function addPatient(patient) {
+    return request({
+        url: API_BASE_URL + "/patient/add",
+        method: 'POST',
+        body: JSON.stringify(patient)
+    });
+}
