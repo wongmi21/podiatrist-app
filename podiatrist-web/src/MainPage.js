@@ -1,10 +1,10 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {Button, Form, Icon, Input, Layout, Menu, Modal, notification, Radio, Table} from "antd";
+import {Button, Divider, Form, Icon, Input, Layout, Menu, Modal, notification, Popconfirm, Radio, Table} from "antd";
 
 import './css/MainPage.css'
-import {addPatient, getAllPatientData} from "./util/APIUtils";
+import {addPatient, deletePatient, getAllPatientData} from "./util/APIUtils";
 import {ACCESS_TOKEN} from "./constants";
 
 const {Sider, Content} = Layout;
@@ -81,7 +81,10 @@ class MainPage extends React.Component {
                 });
                 this.updateDataSource();
             }).catch(error => {
-                console.log(error);
+            notification.error({
+                message: 'Podiatrist App',
+                description: error.message,
+            });
             this.setState({ addPatientModalLoading: false });
         });
     };
@@ -102,6 +105,21 @@ class MainPage extends React.Component {
     handleReset = clearFilters => () => {
         clearFilters();
         this.setState({ searchText: '' });
+    };
+
+    handleDelete = (key, name, nric) => {
+        deletePatient({name: name, nric: nric})
+            .then(response => {
+                console.log(response);
+                notification.success({
+                    message: 'Podiatrist App',
+                    description: response.message,
+                });
+            }).catch(error => {
+                console.log(error);
+        });
+        const dataSource = [...this.state.dataSource];
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     };
 
     render() {
@@ -190,6 +208,18 @@ class MainPage extends React.Component {
             title: 'Sex',
             dataIndex: 'sex',
             key: 'sex',
+        }, {
+            title: "Action",
+            key: "action",
+            render: (text, record) => (
+                <span>
+                  <a href="javascript:;">Edit</a>
+                  <Divider type="vertical" />
+                  <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key, record.name, record.nric)}>
+                    <a href="javascript:;">Delete</a>
+                  </Popconfirm>
+                </span>
+            )
         }];
 
         const formItemLayout = {

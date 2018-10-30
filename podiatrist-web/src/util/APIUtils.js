@@ -79,3 +79,11 @@ export function addPatient(patient) {
         body: JSON.stringify(patient)
     });
 }
+
+export function deletePatient(patient) {
+    return request({
+        url: API_BASE_URL + "/patient/delete",
+        method: 'POST',
+        body: JSON.stringify(patient)
+    });
+}
