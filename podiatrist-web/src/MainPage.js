@@ -33,7 +33,7 @@ class MainPage extends React.Component {
             addPatientModalVisible: false,
             addPatientName: null,
             addPatientNric: null,
-            addPatientSex: null
+            addPatientSex: 'M'
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -71,12 +71,14 @@ class MainPage extends React.Component {
                 this.setState({
                     addPatientName: null,
                     addPatientNric: null,
+                    addPatientSex: 'M',
                     addPatientModalLoading: false,
                     addPatientModalVisible: false
                 });
                 this.updateDataSource();
             }).catch(error => {
                 console.log(error);
+            this.setState({ addPatientModalLoading: false });
         });
     };
 
@@ -158,7 +160,7 @@ class MainPage extends React.Component {
                                     {...formItemLayout}
                                     label="Sex"
                                 >
-                                    <Radio.Group name='addPatientSex' defaultValue="M" buttonStyle="solid" onChange={this.handleInputChange}>
+                                    <Radio.Group name='addPatientSex' defaultValue="M" buttonStyle="solid" onChange={this.handleInputChange} value={this.state.addPatientSex}>
                                         <Radio.Button value="M">Male</Radio.Button>
                                         <Radio.Button value="F">Female</Radio.Button>
                                     </Radio.Group>
