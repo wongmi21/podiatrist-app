@@ -37,7 +37,7 @@ class LoginPage extends React.Component {
                     isLoading: false
                 });
                 this.props.login(response, true);
-                this.props.history.push("/");
+                this.props.history.push("/patients");
             }).catch(error => {
             this.setState({
                 isLoading: false

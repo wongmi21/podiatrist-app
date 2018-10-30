@@ -1,11 +1,12 @@
 import React from 'react'
-import {withRouter} from 'react-router-dom';
+import {Route, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Button, Icon, Layout, Menu, notification} from "antd";
 
 import './css/MainPage.css'
 import {ACCESS_TOKEN} from "./constants";
 import ListPatientsPage from "./ListPatientsPage";
+import EditPatientPage from "./EditPatientPage";
 
 const {Sider, Content} = Layout;
 
@@ -52,7 +53,8 @@ class MainPage extends React.Component {
                 </Sider>
                 <Layout>
                     <Content className='layout-content'>
-                        <ListPatientsPage />
+                        <Route exact path='/patients' component={ListPatientsPage}/>
+                        <Route path='/patients/:id' component={EditPatientPage}/>
                     </Content>
                 </Layout>
             </Layout>

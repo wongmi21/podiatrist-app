@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {Button, Input, Modal, Table, Form, Radio, Icon, Divider, Popconfirm, notification} from "antd";
 import {ACCESS_TOKEN} from "./constants";
@@ -194,7 +194,7 @@ class ListPatientsPage extends React.Component {
             key: "action",
             render: (text, record) => (
                 <span>
-                  <a href="javascript:;">Edit</a>
+                  <Link to={'/patients/' + record.key}>Edit</Link>
                   <Divider type="vertical" />
                   <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key, record.name, record.nric)}>
                     <a href="javascript:;">Delete</a>

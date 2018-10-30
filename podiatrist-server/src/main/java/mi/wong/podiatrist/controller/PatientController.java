@@ -1,10 +1,7 @@
 package mi.wong.podiatrist.controller;
 
 import mi.wong.podiatrist.model.Patient;
-import mi.wong.podiatrist.payload.AddPatientRequest;
-import mi.wong.podiatrist.payload.ApiResponse;
-import mi.wong.podiatrist.payload.DeletePatientRequest;
-import mi.wong.podiatrist.payload.PatientSummary;
+import mi.wong.podiatrist.payload.*;
 import mi.wong.podiatrist.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,5 +55,31 @@ public class PatientController {
         } else {
             return new ResponseEntity(new ApiResponse(false, "Patient cannot be deleted"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/patient/get")
+    public Patient getPatientData(@RequestParam(value = "id") Long id) {
+        return patientRepository.findById(id).get();
+    }
+
+    @PostMapping("/patient/edit")
+    public ResponseEntity<?> editPatient(@Valid @RequestBody EditPatientRequest editPatientRequest) {
+        Optional<Patient> optionalNricAlreadyExistsPatient = patientRepository.findByNric(editPatientRequest.getNric());
+        boolean nricAlreadyExists = optionalNricAlreadyExistsPatient.isPresent();
+        Patient patient;
+        if (nricAlreadyExists) {
+            Patient nricAlreadyExistsPatient = optionalNricAlreadyExistsPatient.get();
+            if (!nricAlreadyExistsPatient.getId().equals(editPatientRequest.getId())) {
+                return new ResponseEntity(new ApiResponse(false, "There already exists a patient with the same NRIC!"), HttpStatus.BAD_REQUEST);
+            }
+            patient = nricAlreadyExistsPatient;
+        } else {
+            patient = patientRepository.findById(editPatientRequest.getId()).get();
+        }
+        patient.setName(editPatientRequest.getName());
+        patient.setNric(editPatientRequest.getNric());
+        patient.setSex(editPatientRequest.getSex());
+        patientRepository.save(patient);
+        return ResponseEntity.ok(new ApiResponse(true, "Patient ID: " + editPatientRequest.getId() + " updated!"));
     }
 }

@@ -87,3 +87,18 @@ export function deletePatient(patient) {
         body: JSON.stringify(patient)
     });
 }
+
+export function getPatientData(id) {
+    return request({
+        url: API_BASE_URL + "/patient/get?id=" + id,
+        method: 'GET'
+    });
+}
+
+export function editPatient(patient) {
+    return request({
+        url: API_BASE_URL + "/patient/edit",
+        method: 'POST',
+        body: JSON.stringify(patient)
+    });
+}
