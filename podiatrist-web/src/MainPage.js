@@ -5,6 +5,7 @@ import {Button, Form, Icon, Input, Layout, Menu, Modal, notification, Radio, Tab
 
 import './css/MainPage.css'
 import {addPatient, getAllPatientData} from "./util/APIUtils";
+import {ACCESS_TOKEN} from "./constants";
 
 const {Sider, Content} = Layout;
 
@@ -23,6 +24,23 @@ class MainPage extends React.Component {
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+    }
+
+    handleLogout() {
+        localStorage.removeItem(ACCESS_TOKEN);
+
+        this.setState({
+            currentUser: null,
+            isAuthenticated: false
+        });
+
+        this.props.history.push('/login');
+
+        notification.success({
+            message: 'Podiatrist App',
+            description: "You're successfully logged out.",
+        });
     }
 
     updateDataSource() {
@@ -187,17 +205,19 @@ class MainPage extends React.Component {
         return (
             <Layout className='layout-container'>
                 <Sider className='layout-sider'>
-                    <div className="logo" />
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                        <Menu.Item key="1">
-                            <Icon type="team" />
-                            <span className="nav-text">Patients</span>
-                        </Menu.Item>
-                        <Menu.Item key="2">
-                            <Icon type="setting" />
-                            <span className="nav-text">User Management</span>
-                        </Menu.Item>
-                    </Menu>
+                    <Layout>
+                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                            <Menu.Item key="1">
+                                <Icon type="team" />
+                                <span className="nav-text">Patients</span>
+                            </Menu.Item>
+                            <Menu.Item key="2">
+                                <Icon type="setting" />
+                                <span className="nav-text">User Management</span>
+                            </Menu.Item>
+                        </Menu>
+                    </Layout>
+                    <Layout className='layout-log-out'><Button onClick={this.handleLogout}>Log Out</Button></Layout>
                 </Sider>
                 <Layout>
                     <Content className='layout-content'>

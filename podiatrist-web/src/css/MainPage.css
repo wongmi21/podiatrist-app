@@ -18,6 +18,11 @@
     margin: 16px 16px 16px 216px;
 }
 
+.layout-log-out {
+    margin: 16px;
+    background: black;
+}
+
 .custom-filter-dropdown {
     padding: 8px;
     border-radius: 6px;
