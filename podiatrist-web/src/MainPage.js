@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route, withRouter} from 'react-router-dom';
+import {Link, Route, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Button, Icon, Layout, Menu, notification} from "antd";
 
@@ -42,10 +42,12 @@ class MainPage extends React.Component {
                             <Menu.Item key="1">
                                 <Icon type="team" />
                                 <span className="nav-text">Patients</span>
+                                <Link to='/patients' />
                             </Menu.Item>
                             <Menu.Item key="2">
                                 <Icon type="setting" />
                                 <span className="nav-text">User Management</span>
+                                <Link to='/users' />
                             </Menu.Item>
                         </Menu>
                     </Layout>

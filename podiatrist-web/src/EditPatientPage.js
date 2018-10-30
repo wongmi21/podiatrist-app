@@ -1,9 +1,11 @@
 import React from 'react';
 
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {Button, Input, Form} from "antd";
+import {notification, Button, Input, Form} from "antd";
 import {editPatient, getPatientData} from "./util/APIUtils";
+
+import './css/EditPatientPage.css';
 
 class EditPatientPage extends React.Component {
 
@@ -11,9 +13,18 @@ class EditPatientPage extends React.Component {
         super(props);
         this.state = {
             id: null,
+            pid: null,
             name: null,
             nric: null,
-            sex: null
+            sex: null,
+            phoneNumber: null,
+            email: null,
+            address: null,
+            postalCode: null,
+            occupation: null,
+            height: null,
+            weight: null,
+            shoeSize: null
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,10 +35,19 @@ class EditPatientPage extends React.Component {
             .then(response => {
                 this.setState({
                     id: response.id,
+                    pid: response.pid,
                     name: response.name,
                     nric: response.nric,
-                    sex: response.sex
-                })
+                    sex: response.sex,
+                    phoneNumber: response.phoneNumber,
+                    email: response.email,
+                    address: response.address,
+                    postalCode: response.postalCode,
+                    occupation: response.occupation,
+                    height: response.height,
+                    weight: response.weight,
+                    shoeSize: response.shoeSize
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -42,12 +62,24 @@ class EditPatientPage extends React.Component {
         e.preventDefault();
         editPatient({
             id: this.state.id,
+            pid: this.state.pid,
             name: this.state.name,
             nric: this.state.nric,
-            sex: this.state.sex
+            sex: this.state.sex,
+            phoneNumber: this.state.phoneNumber,
+            email: this.state.email,
+            address: this.state.address,
+            postalCode: this.state.postalCode,
+            occupation: this.state.occupation,
+            height: this.state.height,
+            weight: this.state.weight,
+            shoeSize: this.state.shoeSize
         })
             .then(response => {
-                console.log(response)
+                notification.success({
+                    message: 'Podiatrist App',
+                    description: response.message
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -57,21 +89,27 @@ class EditPatientPage extends React.Component {
     render() {
         const formItemLayout = {
             labelCol: {
-                sm: { span: 2 }
+                sm: { span: 3 }
             },
             wrapperCol: {
-                sm: { span: 10 }
+                sm: { span: 13 }
             }
         };
 
         return (
-            <div >
+            <div>
                 <Form onSubmit={this.handleSubmit}>
                     <Form.Item
                         {...formItemLayout}
                         label="ID"
                     >
                         <Input name='id' disabled value={this.state.id} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Patient ID"
+                    >
+                        <Input name='pid' value={this.state.pid} onChange={this.handleInputChange}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -91,8 +129,57 @@ class EditPatientPage extends React.Component {
                     >
                         <Input name='sex' value={this.state.sex} onChange={this.handleInputChange}/>
                     </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Phone Number"
+                    >
+                        <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="E-mail"
+                    >
+                        <Input name='email' value={this.state.email} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Address"
+                    >
+                        <Input name='address' value={this.state.address} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Postal Code"
+                    >
+                        <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Occupation"
+                    >
+                        <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Height (cm)"
+                    >
+                        <Input name='height' value={this.state.height} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Weight (kg)"
+                    >
+                        <Input name='weight' value={this.state.weight} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Shoe Size"
+                    >
+                        <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
+                    </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">Save</Button>
+                        <Link to='/patients'><Button>Back</Button></Link>
+                        <Button type="primary" htmlType="submit" className='save-button'>Save</Button>
                     </Form.Item>
                 </Form>
             </div>

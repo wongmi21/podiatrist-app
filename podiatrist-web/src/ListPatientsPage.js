@@ -3,11 +3,11 @@ import React from 'react';
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {Button, Input, Modal, Table, Form, Radio, Icon, Divider, Popconfirm, notification} from "antd";
-import {ACCESS_TOKEN} from "./constants";
 import {addPatient, deletePatient, getAllPatientData} from "./util/APIUtils";
 
-class ListPatientsPage extends React.Component {
+import './css/ListPatientsPage.css'
 
+class ListPatientsPage extends React.Component {
 
     constructor(props) {
         super(props);

@@ -76,10 +76,19 @@ public class PatientController {
         } else {
             patient = patientRepository.findById(editPatientRequest.getId()).get();
         }
+        patient.setPid(editPatientRequest.getPid());
         patient.setName(editPatientRequest.getName());
         patient.setNric(editPatientRequest.getNric());
         patient.setSex(editPatientRequest.getSex());
+        patient.setPhoneNumber(editPatientRequest.getPhoneNumber());
+        patient.setEmail(editPatientRequest.getEmail());
+        patient.setAddress(editPatientRequest.getAddress());
+        patient.setPostalCode(editPatientRequest.getPostalCode());
+        patient.setOccupation(editPatientRequest.getOccupation());
+        patient.setHeight(editPatientRequest.getHeight());
+        patient.setWeight(editPatientRequest.getWeight());
+        patient.setShoeSize(editPatientRequest.getShoeSize());
         patientRepository.save(patient);
-        return ResponseEntity.ok(new ApiResponse(true, "Patient ID: " + editPatientRequest.getId() + " updated!"));
+        return ResponseEntity.ok(new ApiResponse(true, "Patient " + editPatientRequest.getName()+ " updated!"));
     }
 }
