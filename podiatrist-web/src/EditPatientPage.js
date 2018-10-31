@@ -48,11 +48,14 @@ class EditPatientPage extends React.Component {
             weight: null,
             shoeSize: null,
             problems: [],
-            additionalProblems: null
+            additionalProblems: null,
+            otherSignificantFindings: [],
+            additionalOtherSignificantFindings: null
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleProblemsChange = this.handleProblemsChange.bind(this);
+        this.handleOtherSignificantFindingsChange = this.handleOtherSignificantFindingsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -74,13 +77,21 @@ class EditPatientPage extends React.Component {
                     height: response.height,
                     weight: response.weight,
                     shoeSize: response.shoeSize,
-                    additionalProblems: response.additionalProblems
+                    additionalProblems: response.additionalProblems,
+                    additionalOtherSignificantFindings: response.additionalOtherSignificantFindings
                 });
                 let problems = [];
                 for (const problem of response.problems) {
                     problems.push(problem.name);
                 }
-                this.setState({problems});
+                let otherSignificantFindings = [];
+                for (const otherSignificantFinding of response.otherSignificantFindings) {
+                    otherSignificantFindings.push(otherSignificantFinding.name);
+                }
+                this.setState({
+                    problems: problems,
+                    otherSignificantFindings: otherSignificantFindings
+                });
             })
             .catch(error => {
                 console.log(error);
@@ -103,6 +114,10 @@ class EditPatientPage extends React.Component {
         this.setState({problems: checkedValues});
     }
 
+    handleOtherSignificantFindingsChange(checkedValues) {
+        this.setState({otherSignificantFindings: checkedValues});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         editPatient({
@@ -121,7 +136,9 @@ class EditPatientPage extends React.Component {
             weight: this.state.weight,
             shoeSize: this.state.shoeSize,
             problems: this.state.problems,
-            additionalProblems: this.state.additionalProblems
+            additionalProblems: this.state.additionalProblems,
+            otherSignificantFindings: this.state.otherSignificantFindings,
+            additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings
         })
             .then(response => {
                 notification.success({
@@ -137,10 +154,10 @@ class EditPatientPage extends React.Component {
     render() {
         const formItemLayout = {
             labelCol: {
-                sm: { span: 3 }
+                sm: { span: 4 }
             },
             wrapperCol: {
-                sm: { span: 13 }
+                sm: { span: 12 }
             }
         };
 
@@ -249,6 +266,29 @@ class EditPatientPage extends React.Component {
                         </Row>
                     </Checkbox.Group>
                     <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} autosize />
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Other Significant Findings"
+                >
+                    <Checkbox.Group style={{ width: '100%' }} value={this.state.otherSignificantFindings} onChange={this.handleOtherSignificantFindingsChange}>
+                        <Row>
+                            <Col span={12}><Checkbox value="CALLUS_UNDER_2_3_MPJ">Callus under 2/3 MPJ</Checkbox></Col>
+                            <Col span={12}><Checkbox value="CALLUS_UNDER_2ND_MPJ">Callus under 2nd MPJ</Checkbox></Col>
+                            <Col span={12}><Checkbox value="CALLUS_UNDER_3RD_MPJ">Callus under 3rd MPJ</Checkbox></Col>
+                            <Col span={12}><Checkbox value="CALLUSES_LATERAL_BORDER_OF_FOOT">Calluses lateral border of foot</Checkbox></Col>
+                            <Col span={12}><Checkbox value="CALLUSES_MEDIAL_BORDER_OF_HALLUX">Calluses medial border of hallux</Checkbox></Col>
+                            <Col span={12}><Checkbox value="HAMMER_TOE">Hammer toe</Checkbox></Col>
+                            <Col span={12}><Checkbox value="HAV">HAV</Checkbox></Col>
+                            <Col span={12}><Checkbox value="HAV_MILD">HAV (Mild)</Checkbox></Col>
+                            <Col span={12}><Checkbox value="LEFT_HIP_LOWER_THAN_RIGHT">Left hip lower than right</Checkbox></Col>
+                            <Col span={12}><Checkbox value="LIMITED">Limited</Checkbox></Col>
+                            <Col span={12}><Checkbox value="NORMAL">Normal</Checkbox></Col>
+                            <Col span={12}><Checkbox value="RIGHT_HIP_LOWER_THAN_LEFT">Right hip lower than left</Checkbox></Col>
+                            <Col span={12}><Checkbox value="SLIGHTY_LIMITED">Slightly limited</Checkbox></Col>
+                        </Row>
+                    </Checkbox.Group>
+                    <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} autosize />
                 </Form.Item>
                 <Form.Item>
                     <Link to='/patients'><Button>Back</Button></Link>

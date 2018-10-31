@@ -32,6 +32,8 @@ public class EditPatientRequest {
     private Double shoeSize;
     private List<String> problems = new ArrayList<>();
     private String additionalProblems;
+    private List<String> otherSignificantFindings = new ArrayList<>();
+    private String additionalOtherSignificantFindings;
 
     public Long getId() {
         return id;
@@ -159,5 +161,21 @@ public class EditPatientRequest {
 
     public void setAdditionalProblems(String additionalProblems) {
         this.additionalProblems = additionalProblems;
+    }
+
+    public List<String> getOtherSignificantFindings() {
+        return otherSignificantFindings;
+    }
+
+    public void setOtherSignificantFindings(List<String> otherSignificantFindings) {
+        this.otherSignificantFindings = otherSignificantFindings;
+    }
+
+    public String getAdditionalOtherSignificantFindings() {
+        return additionalOtherSignificantFindings;
+    }
+
+    public void setAdditionalOtherSignificantFindings(String additionalOtherSignificantFindings) {
+        this.additionalOtherSignificantFindings = additionalOtherSignificantFindings;
     }
 }

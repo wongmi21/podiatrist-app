@@ -1,0 +1,17 @@
+package mi.wong.podiatrist.model;
+
+public enum OtherSignificantFindingName {
+    CALLUS_UNDER_2_3_MPJ,
+    CALLUS_UNDER_2ND_MPJ,
+    CALLUS_UNDER_3RD_MPJ,
+    CALLUSES_LATERAL_BORDER_OF_FOOT,
+    CALLUSES_MEDIAL_BORDER_OF_HALLUX,
+    HAMMER_TOE,
+    HAV,
+    HAV_MILD,
+    LEFT_HIP_LOWER_THAN_RIGHT,
+    LIMITED,
+    NORMAL,
+    RIGHT_HIP_LOWER_THAN_LEFT,
+    SLIGHTY_LIMITED
+}

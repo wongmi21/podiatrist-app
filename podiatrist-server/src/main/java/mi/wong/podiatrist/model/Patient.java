@@ -37,6 +37,14 @@ public class Patient {
 
     private String additionalProblems;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "patient_other_significant_findings",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "other_significant_finding_id"))
+    private List<OtherSignificantFinding> otherSignificantFindings = new ArrayList<>();
+
+    private String additionalOtherSignificantFindings;
+
     public Patient() {
     }
 
@@ -172,5 +180,21 @@ public class Patient {
 
     public void setAdditionalProblems(String additionalProblems) {
         this.additionalProblems = additionalProblems;
+    }
+
+    public List<OtherSignificantFinding> getOtherSignificantFindings() {
+        return otherSignificantFindings;
+    }
+
+    public void setOtherSignificantFindings(List<OtherSignificantFinding> otherSignificantFindings) {
+        this.otherSignificantFindings = otherSignificantFindings;
+    }
+
+    public String getAdditionalOtherSignificantFindings() {
+        return additionalOtherSignificantFindings;
+    }
+
+    public void setAdditionalOtherSignificantFindings(String additionalOtherSignificantFindings) {
+        this.additionalOtherSignificantFindings = additionalOtherSignificantFindings;
     }
 }

@@ -1,9 +1,8 @@
 package mi.wong.podiatrist.controller;
 
-import mi.wong.podiatrist.model.Patient;
-import mi.wong.podiatrist.model.Problem;
-import mi.wong.podiatrist.model.ProblemName;
+import mi.wong.podiatrist.model.*;
 import mi.wong.podiatrist.payload.*;
+import mi.wong.podiatrist.repository.OtherSignificantFindingRepository;
 import mi.wong.podiatrist.repository.PatientRepository;
 import mi.wong.podiatrist.repository.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,9 @@ public class PatientController {
 
     @Autowired
     private ProblemRepository problemRepository;
+
+    @Autowired
+    private OtherSignificantFindingRepository otherSignificantFindingRepository;
 
     @GetMapping("/patient/all")
     public List<PatientSummary> getAllPatientData() {
@@ -99,6 +101,12 @@ public class PatientController {
         }
         patient.setProblems(problems);
         patient.setAdditionalProblems(editPatientRequest.getAdditionalProblems());
+        List<OtherSignificantFinding> otherSignificantFindings = new ArrayList<>();
+        for (String otherSignificantFinding : editPatientRequest.getOtherSignificantFindings()) {
+            otherSignificantFindings.add(otherSignificantFindingRepository.findByName(OtherSignificantFindingName.valueOf(otherSignificantFinding)).get());
+        }
+        patient.setOtherSignificantFindings(otherSignificantFindings);
+        patient.setAdditionalOtherSignificantFindings(editPatientRequest.getAdditionalOtherSignificantFindings());
         patientRepository.save(patient);
         return ResponseEntity.ok(new ApiResponse(true, "Patient " + editPatientRequest.getName()+ " updated!"));
     }
