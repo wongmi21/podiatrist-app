@@ -133,7 +133,7 @@ class SymptomsTable extends React.Component {
             dataIndex: 'action',
             render: (text, record) => {
                 return (
-                    this.state.dataSource.length >= 1
+                    this.props.dataSource.length >= 1
                         ? (
                             <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
                                 <a href="javascript:;">Delete</a>
@@ -144,18 +144,18 @@ class SymptomsTable extends React.Component {
         }];
 
         this.state = {
-            dataSource: [],
             count: 0,
         };
     }
 
     handleDelete = (key) => {
-        const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        const dataSource = [...this.props.dataSource];
+        const newData = dataSource.filter(item => item.key !== key);
+        this.props.onChange(newData);
     }
 
     handleAdd = () => {
-        const { count, dataSource } = this.state;
+        const { count } = this.state;
         const newData = {
             key: count,
             anatomy: 'Click to edit',
@@ -164,24 +164,23 @@ class SymptomsTable extends React.Component {
             notes: 'Click to edit'
         };
         this.setState({
-            dataSource: [...dataSource, newData],
             count: count + 1,
         });
+        this.props.onChange([...this.props.dataSource, newData]);
     }
 
     handleSave = (row) => {
-        const newData = [...this.state.dataSource];
+        const newData = [...this.props.dataSource];
         const index = newData.findIndex(item => row.key === item.key);
         const item = newData[index];
         newData.splice(index, 1, {
             ...item,
             ...row,
         });
-        this.setState({ dataSource: newData });
+        this.props.onChange(newData);
     }
 
     render() {
-        const { dataSource } = this.state;
         const components = {
             body: {
                 row: EditableFormRow,
@@ -212,7 +211,7 @@ class SymptomsTable extends React.Component {
                     components={components}
                     rowClassName={() => 'editable-row'}
                     bordered
-                    dataSource={dataSource}
+                    dataSource={this.props.dataSource}
                     columns={columns}
                     size='middle'
                     pagination={false}

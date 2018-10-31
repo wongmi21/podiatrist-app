@@ -74,7 +74,8 @@ class EditPatientPage extends React.Component {
             otherSignificantFindings: [],
             additionalOtherSignificantFindings: null,
             supplied: [],
-            additionalSupplied: null
+            additionalSupplied: null,
+            symptomsData: []
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -82,6 +83,7 @@ class EditPatientPage extends React.Component {
         this.handleOtherSignificantFindingsChange = this.handleOtherSignificantFindingsChange.bind(this);
         this.handleSuppliedChange = this.handleSuppliedChange.bind(this);
         this.handleInputBlur = this.handleInputBlur.bind(this);
+        this.handleSymptomsTableUpdated = this.handleSymptomsTableUpdated.bind(this);
     }
 
     componentDidMount() {
@@ -106,7 +108,8 @@ class EditPatientPage extends React.Component {
                     shoeSize: response.shoeSize,
                     additionalProblems: response.additionalProblems,
                     additionalOtherSignificantFindings: response.additionalOtherSignificantFindings,
-                    additionalSupplied: response.additionalSupplied
+                    additionalSupplied: response.additionalSupplied,
+                    symptomsData: JSON.parse(response.symptomsData)
                 });
                 let problems = [];
                 for (const problem of response.problems) {
@@ -155,6 +158,21 @@ class EditPatientPage extends React.Component {
         this.setState({supplied: checkedValues});
     }
 
+    handleSymptomsTableUpdated(data) {
+        this.setState({symptomsData: data});
+        editPatient({
+            id: this.state.id,
+            nric: this.state.nric,
+            symptomsData: JSON.stringify(data)
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
     handleInputBlur() {
         editPatient({
             id: this.state.id,
@@ -187,7 +205,7 @@ class EditPatientPage extends React.Component {
             })
     }
 
-    handleChange = (info) => {
+    handleImageChange = (info) => {
         if (info.file.status === 'uploading') {
             this.setState({ imageLoading: true });
             return;
@@ -228,7 +246,7 @@ class EditPatientPage extends React.Component {
                     showUploadList={false}
                     action="//jsonplaceholder.typicode.com/posts/"
                     beforeUpload={beforeUpload}
-                    onChange={this.handleChange}
+                    onChange={this.handleImageChange}
                 >
                     {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
                 </Upload>
@@ -399,7 +417,7 @@ class EditPatientPage extends React.Component {
                         {...formItemLayout}
                         label="Symptoms"
                     >
-                        <SymptomsTable/>
+                        <SymptomsTable onChange={this.handleSymptomsTableUpdated} dataSource={this.state.symptomsData} />
                     </Form.Item>
                     <Form.Item>
                         <Link to='/patients'><Button>Back</Button></Link>

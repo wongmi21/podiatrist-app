@@ -55,6 +55,9 @@ public class Patient {
 
     private String additionalSupplied;
 
+    @Lob
+    private String symptomsData;
+
     public Patient() {
     }
 
@@ -230,5 +233,13 @@ public class Patient {
 
     public void setAdditionalSupplied(String additionalSupplied) {
         this.additionalSupplied = additionalSupplied;
+    }
+
+    public String getSymptomsData() {
+        return symptomsData;
+    }
+
+    public void setSymptomsData(String symptomsData) {
+        this.symptomsData = symptomsData;
     }
 }

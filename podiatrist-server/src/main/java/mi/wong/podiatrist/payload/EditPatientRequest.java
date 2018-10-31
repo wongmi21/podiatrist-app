@@ -30,6 +30,7 @@ public class EditPatientRequest {
     private String additionalOtherSignificantFindings;
     private List<String> supplied = new ArrayList<>();
     private String additionalSupplied;
+    private String symptomsData;
 
     public Long getId() {
         return id;
@@ -197,5 +198,13 @@ public class EditPatientRequest {
 
     public void setAdditionalSupplied(String additionalSupplied) {
         this.additionalSupplied = additionalSupplied;
+    }
+
+    public String getSymptomsData() {
+        return symptomsData;
+    }
+
+    public void setSymptomsData(String symptomsData) {
+        this.symptomsData = symptomsData;
     }
 }
