@@ -5,6 +5,7 @@ import mi.wong.podiatrist.payload.*;
 import mi.wong.podiatrist.repository.OtherSignificantFindingRepository;
 import mi.wong.podiatrist.repository.PatientRepository;
 import mi.wong.podiatrist.repository.ProblemRepository;
+import mi.wong.podiatrist.repository.SuppliedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class PatientController {
 
     @Autowired
     private OtherSignificantFindingRepository otherSignificantFindingRepository;
+
+    @Autowired
+    private SuppliedRepository suppliedRepository;
 
     @GetMapping("/patient/all")
     public List<PatientSummary> getAllPatientData() {
@@ -107,6 +111,12 @@ public class PatientController {
         }
         patient.setOtherSignificantFindings(otherSignificantFindings);
         patient.setAdditionalOtherSignificantFindings(editPatientRequest.getAdditionalOtherSignificantFindings());
+        List<Supplied> supplied = new ArrayList<>();
+        for (String suppliedOne : editPatientRequest.getSupplied()) {
+            supplied.add(suppliedRepository.findByName(SuppliedName.valueOf(suppliedOne)).get());
+        }
+        patient.setSupplied(supplied);
+        patient.setAdditionalSupplied(editPatientRequest.getAdditionalSupplied());
         patientRepository.save(patient);
         return ResponseEntity.ok(new ApiResponse(true, "Patient " + editPatientRequest.getName()+ " updated!"));
     }

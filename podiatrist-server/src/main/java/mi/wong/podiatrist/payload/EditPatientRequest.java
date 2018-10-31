@@ -34,6 +34,8 @@ public class EditPatientRequest {
     private String additionalProblems;
     private List<String> otherSignificantFindings = new ArrayList<>();
     private String additionalOtherSignificantFindings;
+    private List<String> supplied = new ArrayList<>();
+    private String additionalSupplied;
 
     public Long getId() {
         return id;
@@ -177,5 +179,21 @@ public class EditPatientRequest {
 
     public void setAdditionalOtherSignificantFindings(String additionalOtherSignificantFindings) {
         this.additionalOtherSignificantFindings = additionalOtherSignificantFindings;
+    }
+
+    public List<String> getSupplied() {
+        return supplied;
+    }
+
+    public void setSupplied(List<String> supplied) {
+        this.supplied = supplied;
+    }
+
+    public String getAdditionalSupplied() {
+        return additionalSupplied;
+    }
+
+    public void setAdditionalSupplied(String additionalSupplied) {
+        this.additionalSupplied = additionalSupplied;
     }
 }

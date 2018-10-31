@@ -50,12 +50,15 @@ class EditPatientPage extends React.Component {
             problems: [],
             additionalProblems: null,
             otherSignificantFindings: [],
-            additionalOtherSignificantFindings: null
+            additionalOtherSignificantFindings: null,
+            supplied: [],
+            additionalSupplied: null
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleProblemsChange = this.handleProblemsChange.bind(this);
         this.handleOtherSignificantFindingsChange = this.handleOtherSignificantFindingsChange.bind(this);
+        this.handleSuppliedChange = this.handleSuppliedChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -78,7 +81,8 @@ class EditPatientPage extends React.Component {
                     weight: response.weight,
                     shoeSize: response.shoeSize,
                     additionalProblems: response.additionalProblems,
-                    additionalOtherSignificantFindings: response.additionalOtherSignificantFindings
+                    additionalOtherSignificantFindings: response.additionalOtherSignificantFindings,
+                    additionalSupplied: response.additionalSupplied
                 });
                 let problems = [];
                 for (const problem of response.problems) {
@@ -88,9 +92,14 @@ class EditPatientPage extends React.Component {
                 for (const otherSignificantFinding of response.otherSignificantFindings) {
                     otherSignificantFindings.push(otherSignificantFinding.name);
                 }
+                let supplied = [];
+                for (const suppliedOne of response.supplied) {
+                    supplied.push(suppliedOne.name);
+                }
                 this.setState({
                     problems: problems,
-                    otherSignificantFindings: otherSignificantFindings
+                    otherSignificantFindings: otherSignificantFindings,
+                    supplied: supplied
                 });
             })
             .catch(error => {
@@ -118,6 +127,10 @@ class EditPatientPage extends React.Component {
         this.setState({otherSignificantFindings: checkedValues});
     }
 
+    handleSuppliedChange(checkedValues) {
+        this.setState({supplied: checkedValues});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         editPatient({
@@ -138,7 +151,9 @@ class EditPatientPage extends React.Component {
             problems: this.state.problems,
             additionalProblems: this.state.additionalProblems,
             otherSignificantFindings: this.state.otherSignificantFindings,
-            additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings
+            additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings,
+            supplied: this.state.supplied,
+            additionalSupplied: this.state.additionalSupplied
         })
             .then(response => {
                 notification.success({
@@ -289,6 +304,41 @@ class EditPatientPage extends React.Component {
                         </Row>
                     </Checkbox.Group>
                     <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} autosize />
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Supplied"
+                >
+                    <Checkbox.Group style={{ width: '100%' }} value={this.state.supplied} onChange={this.handleSuppliedChange}>
+                        <Row>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_BLUE">Formthotics Blue</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_3_4_DD_BLUE">Formthotics 3/4 DD Blue</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_DD_BLUE">Formthotics DD Blue</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_RED">Formthotics Red</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_DD_RED">Formthotics DD Red</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_DD_RED_LP">Formthotics DD Red/LP</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_SHOCK_STOP">Formthotics Shock Stop</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_BURGUNDY">Formthotics Burgundy</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_LV_BLACK">Formthotics LV Black</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_LV_GOLF">Formthotics LV Golf</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_BLACK">Formthotics Black</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_GOLF">Formthotics Golf</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J1">Formthotics Junior J1</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J2">Formthotics Junior J2</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J3">Formthotics Junior J3</Checkbox></Col>
+                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J4">Formthotics Junior J4</Checkbox></Col>
+                            <Col span={12}><Checkbox value="EXPRESS_FL_RED">Express FL Red</Checkbox></Col>
+                            <Col span={12}><Checkbox value="EXPRESS_FL_BLUE">Express FL Blue</Checkbox></Col>
+                            <Col span={12}><Checkbox value="EXPRESS_3_4_RED">Express 3/4 Red</Checkbox></Col>
+                            <Col span={12}><Checkbox value="EXPRESS_3_4_BLUE">Express 3/4 Blue</Checkbox></Col>
+                            <Col span={12}><Checkbox value="COMFORT_3_4_CHARCOAL">Comfort 3/4 Charcoal</Checkbox></Col>
+                            <Col span={12}><Checkbox value="RUBBER_3_4_INSOLES">Rubber 3/4 Insoles</Checkbox></Col>
+                            <Col span={12}><Checkbox value="SILIPOS_WONDERSPUR">Silipos WonderSpur</Checkbox></Col>
+                            <Col span={12}><Checkbox value="SILIPOS_WONDERCUP">Silipos WonderCup</Checkbox></Col>
+                            <Col span={12}><Checkbox value="SILIPOS_WONDERSPORT">Silipos WonderSport</Checkbox></Col>
+                        </Row>
+                    </Checkbox.Group>
+                    <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} autosize />
                 </Form.Item>
                 <Form.Item>
                     <Link to='/patients'><Button>Back</Button></Link>
