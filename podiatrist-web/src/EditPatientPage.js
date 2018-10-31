@@ -80,7 +80,7 @@ class EditPatientPage extends React.Component {
         this.handleProblemsChange = this.handleProblemsChange.bind(this);
         this.handleOtherSignificantFindingsChange = this.handleOtherSignificantFindingsChange.bind(this);
         this.handleSuppliedChange = this.handleSuppliedChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInputBlur = this.handleInputBlur.bind(this);
     }
 
     componentDidMount() {
@@ -154,8 +154,7 @@ class EditPatientPage extends React.Component {
         this.setState({supplied: checkedValues});
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleInputBlur() {
         editPatient({
             id: this.state.id,
             pid: this.state.pid,
@@ -181,10 +180,6 @@ class EditPatientPage extends React.Component {
             imageUrl: this.state.imageUrl
         })
             .then(response => {
-                notification.success({
-                    message: 'Podiatrist App',
-                    description: response.message
-                });
             })
             .catch(error => {
                 console.log(error);
@@ -236,96 +231,96 @@ class EditPatientPage extends React.Component {
                 >
                     {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
                 </Upload>
-                <Form onSubmit={this.handleSubmit}>
+                <Form>
                     <Form.Item
                         {...formItemLayout}
                         label="ID"
                     >
-                        <Input name='id' disabled value={this.state.id} onChange={this.handleInputChange}/>
+                        <Input name='id' disabled value={this.state.id}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Patient ID"
                     >
-                        <Input name='pid' value={this.state.pid} onChange={this.handleInputChange}/>
+                        <Input name='pid' value={this.state.pid} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Name"
                     >
-                        <Input name='name' value={this.state.name} onChange={this.handleInputChange}/>
+                        <Input name='name' value={this.state.name} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="NRIC"
                     >
-                        <Input name='nric' value={this.state.nric} onChange={this.handleInputChange}/>
+                        <Input name='nric' value={this.state.nric} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Sex"
                     >
-                        <Input name='sex' value={this.state.sex} onChange={this.handleInputChange}/>
+                        <Input name='sex' value={this.state.sex} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Date of Birth"
                     >
-                        <DatePicker value={yyyymmddToMoment(this.state.dateOfBirth)} onChange={this.handleDateChange}/>
+                        <DatePicker value={yyyymmddToMoment(this.state.dateOfBirth)} onChange={this.handleDateChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Phone Number"
                     >
-                        <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange}/>
+                        <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="E-mail"
                     >
-                        <Input name='email' value={this.state.email} onChange={this.handleInputChange}/>
+                        <Input name='email' value={this.state.email} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Address"
                     >
-                        <Input name='address' value={this.state.address} onChange={this.handleInputChange}/>
+                        <Input name='address' value={this.state.address} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Postal Code"
                     >
-                        <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange}/>
+                        <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Occupation"
                     >
-                        <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange}/>
+                        <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Height (cm)"
                     >
-                        <Input name='height' value={this.state.height} onChange={this.handleInputChange}/>
+                        <Input name='height' value={this.state.height} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Weight (kg)"
                     >
-                        <Input name='weight' value={this.state.weight} onChange={this.handleInputChange}/>
+                        <Input name='weight' value={this.state.weight} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Shoe Size"
                     >
-                        <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
+                        <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Problems"
                     >
-                        <Checkbox.Group style={{ width: '100%' }} value={this.state.problems} onChange={this.handleProblemsChange}>
+                        <Checkbox.Group style={{ width: '100%' }} value={this.state.problems} onChange={this.handleProblemsChange} onBlur={this.handleInputBlur}>
                             <Row>
                                 <Col span={12}><Checkbox value="ACHILLES_TENDINITIS">Achilles tendinitis</Checkbox></Col>
                                 <Col span={12}><Checkbox value="COXA_VALGUS">Coxa valgus</Checkbox></Col>
@@ -339,13 +334,13 @@ class EditPatientPage extends React.Component {
                                 <Col span={12}><Checkbox value="METATARSALGIA">Metatarsalgia</Checkbox></Col>
                             </Row>
                         </Checkbox.Group>
-                        <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} autosize />
+                        <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Other Significant Findings"
                     >
-                        <Checkbox.Group style={{ width: '100%' }} value={this.state.otherSignificantFindings} onChange={this.handleOtherSignificantFindingsChange}>
+                        <Checkbox.Group style={{ width: '100%' }} value={this.state.otherSignificantFindings} onChange={this.handleOtherSignificantFindingsChange} onBlur={this.handleInputBlur}>
                             <Row>
                                 <Col span={12}><Checkbox value="CALLUS_UNDER_2_3_MPJ">Callus under 2/3 MPJ</Checkbox></Col>
                                 <Col span={12}><Checkbox value="CALLUS_UNDER_2ND_MPJ">Callus under 2nd MPJ</Checkbox></Col>
@@ -362,13 +357,13 @@ class EditPatientPage extends React.Component {
                                 <Col span={12}><Checkbox value="SLIGHTY_LIMITED">Slightly limited</Checkbox></Col>
                             </Row>
                         </Checkbox.Group>
-                        <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} autosize />
+                        <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Supplied"
                     >
-                        <Checkbox.Group style={{ width: '100%' }} value={this.state.supplied} onChange={this.handleSuppliedChange}>
+                        <Checkbox.Group style={{ width: '100%' }} value={this.state.supplied} onChange={this.handleSuppliedChange} onBlur={this.handleInputBlur}>
                             <Row>
                                 <Col span={12}><Checkbox value="FORMTHOTICS_BLUE">Formthotics Blue</Checkbox></Col>
                                 <Col span={12}><Checkbox value="FORMTHOTICS_3_4_DD_BLUE">Formthotics 3/4 DD Blue</Checkbox></Col>
@@ -397,7 +392,7 @@ class EditPatientPage extends React.Component {
                                 <Col span={12}><Checkbox value="SILIPOS_WONDERSPORT">Silipos WonderSport</Checkbox></Col>
                             </Row>
                         </Checkbox.Group>
-                        <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} autosize />
+                        <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
                     </Form.Item>
                     <Form.Item>
                         <Link to='/patients'><Button>Back</Button></Link>

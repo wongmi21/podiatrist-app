@@ -9,20 +9,12 @@ public class EditPatientRequest {
 
     @NotNull
     private Long id;
-
     private Long pid;
-
     private String imageUrl;
-
-    @NotBlank
     private String name;
-
     @NotBlank
     private String nric;
-
-    @NotBlank
     private String sex;
-
     private Integer dateOfBirth;
     private String phoneNumber;
     private String email;
