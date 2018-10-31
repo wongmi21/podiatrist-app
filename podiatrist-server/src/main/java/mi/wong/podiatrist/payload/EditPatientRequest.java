@@ -2,6 +2,10 @@ package mi.wong.podiatrist.payload;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class EditPatientRequest {
 
@@ -28,6 +32,8 @@ public class EditPatientRequest {
     private Integer height;
     private Integer weight;
     private Double shoeSize;
+
+    private List<String> problems = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -139,5 +145,13 @@ public class EditPatientRequest {
 
     public void setShoeSize(Double shoeSize) {
         this.shoeSize = shoeSize;
+    }
+
+    public List<String> getProblems() {
+        return problems;
+    }
+
+    public void setProblems(List<String> problems) {
+        this.problems = problems;
     }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {notification, Button, Input, Form, DatePicker} from "antd";
+import {notification, Button, Input, Form, DatePicker, Row, Col, Checkbox} from "antd";
 import {editPatient, getPatientData} from "./util/APIUtils";
 
 import './css/EditPatientPage.css';
@@ -38,10 +38,12 @@ class EditPatientPage extends React.Component {
             occupation: null,
             height: null,
             weight: null,
-            shoeSize: null
+            shoeSize: null,
+            problems: []
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleProblemsChange = this.handleProblemsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -64,6 +66,11 @@ class EditPatientPage extends React.Component {
                     weight: response.weight,
                     shoeSize: response.shoeSize
                 });
+                let problems = [];
+                for (const problem of response.problems) {
+                    problems.push(problem.name);
+                }
+                this.setState({problems});
             })
             .catch(error => {
                 console.log(error);
@@ -82,6 +89,10 @@ class EditPatientPage extends React.Component {
         }
     }
 
+    handleProblemsChange(checkedValues) {
+        this.setState({problems: checkedValues});
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         editPatient({
@@ -98,7 +109,8 @@ class EditPatientPage extends React.Component {
             occupation: this.state.occupation,
             height: this.state.height,
             weight: this.state.weight,
-            shoeSize: this.state.shoeSize
+            shoeSize: this.state.shoeSize,
+            problems: this.state.problems
         })
             .then(response => {
                 notification.success({
@@ -206,6 +218,25 @@ class EditPatientPage extends React.Component {
                     label="Shoe Size"
                 >
                     <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
+                </Form.Item>
+                <Form.Item
+                    {...formItemLayout}
+                    label="Problems"
+                >
+                    <Checkbox.Group style={{ width: '100%' }} value={this.state.problems} onChange={this.handleProblemsChange}>
+                        <Row>
+                            <Col span={12}><Checkbox value="ACHILLES_TENDINITIS">Achilles tendinitis</Checkbox></Col>
+                            <Col span={12}><Checkbox value="COXA_VALGUS">Coxa valgus</Checkbox></Col>
+                            <Col span={12}><Checkbox value="COXA_VARUS">Coxa varus</Checkbox></Col>
+                            <Col span={12}><Checkbox value="EXCESSIVE_SUBTALAR_PRONATION">Excessive subtalar pronation</Checkbox></Col>
+                            <Col span={12}><Checkbox value="HALLUX_ABDUCTO_VALGUS">Hallux abducto valgus</Checkbox></Col>
+                            <Col span={12}><Checkbox value="HYPER_MOBILE_FEET">Hyper mobile feet</Checkbox></Col>
+                            <Col span={12}><Checkbox value="ILLIO_TIBIAL_BAND_FRICTION_SYNDROME">IT band friction Syndrome</Checkbox></Col>
+                            <Col span={12}><Checkbox value="LOWER_BACK_PAIN">Lower back pain</Checkbox></Col>
+                            <Col span={12}><Checkbox value="MALALIGNMENT_LOWER_LIMBS">Malalignment lower limbs</Checkbox></Col>
+                            <Col span={12}><Checkbox value="METATARSALGIA">Metatarsalgia</Checkbox></Col>
+                        </Row>
+                    </Checkbox.Group>
                 </Form.Item>
                 <Form.Item>
                     <Link to='/patients'><Button>Back</Button></Link>

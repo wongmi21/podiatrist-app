@@ -1,17 +1,18 @@
 package mi.wong.podiatrist.controller;
 
 import mi.wong.podiatrist.model.Patient;
+import mi.wong.podiatrist.model.Problem;
+import mi.wong.podiatrist.model.ProblemName;
 import mi.wong.podiatrist.payload.*;
 import mi.wong.podiatrist.repository.PatientRepository;
+import mi.wong.podiatrist.repository.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -19,6 +20,9 @@ public class PatientController {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private ProblemRepository problemRepository;
 
     @GetMapping("/patient/all")
     public List<PatientSummary> getAllPatientData() {
@@ -89,6 +93,11 @@ public class PatientController {
         patient.setHeight(editPatientRequest.getHeight());
         patient.setWeight(editPatientRequest.getWeight());
         patient.setShoeSize(editPatientRequest.getShoeSize());
+        List<Problem> problems = new ArrayList<>();
+        for (String problemName : editPatientRequest.getProblems()) {
+            problems.add(problemRepository.findByName(ProblemName.valueOf(problemName)).get());
+        }
+        patient.setProblems(problems);
         patientRepository.save(patient);
         return ResponseEntity.ok(new ApiResponse(true, "Patient " + editPatientRequest.getName()+ " updated!"));
     }

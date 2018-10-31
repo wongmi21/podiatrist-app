@@ -1,7 +1,9 @@
 package mi.wong.podiatrist.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,7 +33,7 @@ public class Patient {
     @JoinTable(name = "patient_problems",
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "problem_id"))
-    private Set<Problem> problems = new HashSet<>();
+    private List<Problem> problems = new ArrayList<>();
 
     public Patient() {
     }
@@ -154,11 +156,11 @@ public class Patient {
         this.shoeSize = shoeSize;
     }
 
-    public Set<Problem> getProblems() {
+    public List<Problem> getProblems() {
         return problems;
     }
 
-    public void setProblems(Set<Problem> problems) {
+    public void setProblems(List<Problem> problems) {
         this.problems = problems;
     }
 }
