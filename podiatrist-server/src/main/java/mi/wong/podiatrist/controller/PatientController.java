@@ -86,6 +86,9 @@ public class PatientController {
         } else {
             patient = patientRepository.findById(editPatientRequest.getId()).get();
         }
+
+        patient.setImageUrl(editPatientRequest.getImageUrl());
+
         patient.setPid(editPatientRequest.getPid());
         patient.setName(editPatientRequest.getName());
         patient.setNric(editPatientRequest.getNric());

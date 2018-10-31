@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {notification, Button, Input, Form, DatePicker, Row, Col, Checkbox} from "antd";
+import {notification, Button, Input, Form, DatePicker, Row, Col, Checkbox, Upload, Icon, message} from "antd";
 import {editPatient, getPatientData} from "./util/APIUtils";
 
 import './css/EditPatientPage.css';
@@ -28,11 +28,32 @@ function yyyymmddToMoment(yyyymmdd) {
     }
 }
 
+function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+    const isJPG = file.type === 'image/jpeg';
+    if (!isJPG) {
+        message.error('You can only upload JPG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJPG && isLt2M;
+}
+
 class EditPatientPage extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            imageLoading: false,
+            imageUrl: null,
+
             id: null,
             pid: null,
             name: null,
@@ -66,6 +87,8 @@ class EditPatientPage extends React.Component {
         getPatientData(this.props.match.params.id)
             .then(response => {
                 this.setState({
+                    imageUrl: response.imageUrl,
+
                     id: response.id,
                     pid: response.pid,
                     name: response.name,
@@ -153,7 +176,9 @@ class EditPatientPage extends React.Component {
             otherSignificantFindings: this.state.otherSignificantFindings,
             additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings,
             supplied: this.state.supplied,
-            additionalSupplied: this.state.additionalSupplied
+            additionalSupplied: this.state.additionalSupplied,
+
+            imageUrl: this.state.imageUrl
         })
             .then(response => {
                 notification.success({
@@ -166,6 +191,20 @@ class EditPatientPage extends React.Component {
             })
     }
 
+    handleChange = (info) => {
+        if (info.file.status === 'uploading') {
+            this.setState({ imageLoading: true });
+            return;
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            getBase64(info.file.originFileObj, imageUrl => this.setState({
+                imageUrl,
+                imageLoading: false,
+            }));
+        }
+    }
+
     render() {
         const formItemLayout = {
             labelCol: {
@@ -176,175 +215,196 @@ class EditPatientPage extends React.Component {
             }
         };
 
+        const uploadButton = (
+            <div>
+                <Icon type={this.state.imageLoading ? 'loading' : 'plus'} />
+                <div className="ant-upload-text">Upload</div>
+            </div>
+        );
+        const imageUrl = this.state.imageUrl;
+
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Form.Item
-                    {...formItemLayout}
-                    label="ID"
+            <div>
+                <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    action="//jsonplaceholder.typicode.com/posts/"
+                    beforeUpload={beforeUpload}
+                    onChange={this.handleChange}
                 >
-                    <Input name='id' disabled value={this.state.id} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Patient ID"
-                >
-                    <Input name='pid' value={this.state.pid} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Name"
-                >
-                    <Input name='name' value={this.state.name} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="NRIC"
-                >
-                    <Input name='nric' value={this.state.nric} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Sex"
-                >
-                    <Input name='sex' value={this.state.sex} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Date of Birth"
-                >
-                    <DatePicker value={yyyymmddToMoment(this.state.dateOfBirth)} onChange={this.handleDateChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Phone Number"
-                >
-                    <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="E-mail"
-                >
-                    <Input name='email' value={this.state.email} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Address"
-                >
-                    <Input name='address' value={this.state.address} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Postal Code"
-                >
-                    <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Occupation"
-                >
-                    <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Height (cm)"
-                >
-                    <Input name='height' value={this.state.height} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Weight (kg)"
-                >
-                    <Input name='weight' value={this.state.weight} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Shoe Size"
-                >
-                    <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Problems"
-                >
-                    <Checkbox.Group style={{ width: '100%' }} value={this.state.problems} onChange={this.handleProblemsChange}>
-                        <Row>
-                            <Col span={12}><Checkbox value="ACHILLES_TENDINITIS">Achilles tendinitis</Checkbox></Col>
-                            <Col span={12}><Checkbox value="COXA_VALGUS">Coxa valgus</Checkbox></Col>
-                            <Col span={12}><Checkbox value="COXA_VARUS">Coxa varus</Checkbox></Col>
-                            <Col span={12}><Checkbox value="EXCESSIVE_SUBTALAR_PRONATION">Excessive subtalar pronation</Checkbox></Col>
-                            <Col span={12}><Checkbox value="HALLUX_ABDUCTO_VALGUS">Hallux abducto valgus</Checkbox></Col>
-                            <Col span={12}><Checkbox value="HYPER_MOBILE_FEET">Hyper mobile feet</Checkbox></Col>
-                            <Col span={12}><Checkbox value="ILLIO_TIBIAL_BAND_FRICTION_SYNDROME">IT band friction Syndrome</Checkbox></Col>
-                            <Col span={12}><Checkbox value="LOWER_BACK_PAIN">Lower back pain</Checkbox></Col>
-                            <Col span={12}><Checkbox value="MALALIGNMENT_LOWER_LIMBS">Malalignment lower limbs</Checkbox></Col>
-                            <Col span={12}><Checkbox value="METATARSALGIA">Metatarsalgia</Checkbox></Col>
-                        </Row>
-                    </Checkbox.Group>
-                    <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} autosize />
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Other Significant Findings"
-                >
-                    <Checkbox.Group style={{ width: '100%' }} value={this.state.otherSignificantFindings} onChange={this.handleOtherSignificantFindingsChange}>
-                        <Row>
-                            <Col span={12}><Checkbox value="CALLUS_UNDER_2_3_MPJ">Callus under 2/3 MPJ</Checkbox></Col>
-                            <Col span={12}><Checkbox value="CALLUS_UNDER_2ND_MPJ">Callus under 2nd MPJ</Checkbox></Col>
-                            <Col span={12}><Checkbox value="CALLUS_UNDER_3RD_MPJ">Callus under 3rd MPJ</Checkbox></Col>
-                            <Col span={12}><Checkbox value="CALLUSES_LATERAL_BORDER_OF_FOOT">Calluses lateral border of foot</Checkbox></Col>
-                            <Col span={12}><Checkbox value="CALLUSES_MEDIAL_BORDER_OF_HALLUX">Calluses medial border of hallux</Checkbox></Col>
-                            <Col span={12}><Checkbox value="HAMMER_TOE">Hammer toe</Checkbox></Col>
-                            <Col span={12}><Checkbox value="HAV">HAV</Checkbox></Col>
-                            <Col span={12}><Checkbox value="HAV_MILD">HAV (Mild)</Checkbox></Col>
-                            <Col span={12}><Checkbox value="LEFT_HIP_LOWER_THAN_RIGHT">Left hip lower than right</Checkbox></Col>
-                            <Col span={12}><Checkbox value="LIMITED">Limited</Checkbox></Col>
-                            <Col span={12}><Checkbox value="NORMAL">Normal</Checkbox></Col>
-                            <Col span={12}><Checkbox value="RIGHT_HIP_LOWER_THAN_LEFT">Right hip lower than left</Checkbox></Col>
-                            <Col span={12}><Checkbox value="SLIGHTY_LIMITED">Slightly limited</Checkbox></Col>
-                        </Row>
-                    </Checkbox.Group>
-                    <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} autosize />
-                </Form.Item>
-                <Form.Item
-                    {...formItemLayout}
-                    label="Supplied"
-                >
-                    <Checkbox.Group style={{ width: '100%' }} value={this.state.supplied} onChange={this.handleSuppliedChange}>
-                        <Row>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_BLUE">Formthotics Blue</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_3_4_DD_BLUE">Formthotics 3/4 DD Blue</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_DD_BLUE">Formthotics DD Blue</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_RED">Formthotics Red</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_DD_RED">Formthotics DD Red</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_DD_RED_LP">Formthotics DD Red/LP</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_SHOCK_STOP">Formthotics Shock Stop</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_BURGUNDY">Formthotics Burgundy</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_LV_BLACK">Formthotics LV Black</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_LV_GOLF">Formthotics LV Golf</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_BLACK">Formthotics Black</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_GOLF">Formthotics Golf</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J1">Formthotics Junior J1</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J2">Formthotics Junior J2</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J3">Formthotics Junior J3</Checkbox></Col>
-                            <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J4">Formthotics Junior J4</Checkbox></Col>
-                            <Col span={12}><Checkbox value="EXPRESS_FL_RED">Express FL Red</Checkbox></Col>
-                            <Col span={12}><Checkbox value="EXPRESS_FL_BLUE">Express FL Blue</Checkbox></Col>
-                            <Col span={12}><Checkbox value="EXPRESS_3_4_RED">Express 3/4 Red</Checkbox></Col>
-                            <Col span={12}><Checkbox value="EXPRESS_3_4_BLUE">Express 3/4 Blue</Checkbox></Col>
-                            <Col span={12}><Checkbox value="COMFORT_3_4_CHARCOAL">Comfort 3/4 Charcoal</Checkbox></Col>
-                            <Col span={12}><Checkbox value="RUBBER_3_4_INSOLES">Rubber 3/4 Insoles</Checkbox></Col>
-                            <Col span={12}><Checkbox value="SILIPOS_WONDERSPUR">Silipos WonderSpur</Checkbox></Col>
-                            <Col span={12}><Checkbox value="SILIPOS_WONDERCUP">Silipos WonderCup</Checkbox></Col>
-                            <Col span={12}><Checkbox value="SILIPOS_WONDERSPORT">Silipos WonderSport</Checkbox></Col>
-                        </Row>
-                    </Checkbox.Group>
-                    <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} autosize />
-                </Form.Item>
-                <Form.Item>
-                    <Link to='/patients'><Button>Back</Button></Link>
-                    <Button type="primary" htmlType="submit" className='save-button'>Save</Button>
-                </Form.Item>
-            </Form>
+                    {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                </Upload>
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="ID"
+                    >
+                        <Input name='id' disabled value={this.state.id} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Patient ID"
+                    >
+                        <Input name='pid' value={this.state.pid} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Name"
+                    >
+                        <Input name='name' value={this.state.name} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="NRIC"
+                    >
+                        <Input name='nric' value={this.state.nric} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Sex"
+                    >
+                        <Input name='sex' value={this.state.sex} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Date of Birth"
+                    >
+                        <DatePicker value={yyyymmddToMoment(this.state.dateOfBirth)} onChange={this.handleDateChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Phone Number"
+                    >
+                        <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="E-mail"
+                    >
+                        <Input name='email' value={this.state.email} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Address"
+                    >
+                        <Input name='address' value={this.state.address} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Postal Code"
+                    >
+                        <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Occupation"
+                    >
+                        <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Height (cm)"
+                    >
+                        <Input name='height' value={this.state.height} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Weight (kg)"
+                    >
+                        <Input name='weight' value={this.state.weight} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Shoe Size"
+                    >
+                        <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange}/>
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Problems"
+                    >
+                        <Checkbox.Group style={{ width: '100%' }} value={this.state.problems} onChange={this.handleProblemsChange}>
+                            <Row>
+                                <Col span={12}><Checkbox value="ACHILLES_TENDINITIS">Achilles tendinitis</Checkbox></Col>
+                                <Col span={12}><Checkbox value="COXA_VALGUS">Coxa valgus</Checkbox></Col>
+                                <Col span={12}><Checkbox value="COXA_VARUS">Coxa varus</Checkbox></Col>
+                                <Col span={12}><Checkbox value="EXCESSIVE_SUBTALAR_PRONATION">Excessive subtalar pronation</Checkbox></Col>
+                                <Col span={12}><Checkbox value="HALLUX_ABDUCTO_VALGUS">Hallux abducto valgus</Checkbox></Col>
+                                <Col span={12}><Checkbox value="HYPER_MOBILE_FEET">Hyper mobile feet</Checkbox></Col>
+                                <Col span={12}><Checkbox value="ILLIO_TIBIAL_BAND_FRICTION_SYNDROME">IT band friction Syndrome</Checkbox></Col>
+                                <Col span={12}><Checkbox value="LOWER_BACK_PAIN">Lower back pain</Checkbox></Col>
+                                <Col span={12}><Checkbox value="MALALIGNMENT_LOWER_LIMBS">Malalignment lower limbs</Checkbox></Col>
+                                <Col span={12}><Checkbox value="METATARSALGIA">Metatarsalgia</Checkbox></Col>
+                            </Row>
+                        </Checkbox.Group>
+                        <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} autosize />
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Other Significant Findings"
+                    >
+                        <Checkbox.Group style={{ width: '100%' }} value={this.state.otherSignificantFindings} onChange={this.handleOtherSignificantFindingsChange}>
+                            <Row>
+                                <Col span={12}><Checkbox value="CALLUS_UNDER_2_3_MPJ">Callus under 2/3 MPJ</Checkbox></Col>
+                                <Col span={12}><Checkbox value="CALLUS_UNDER_2ND_MPJ">Callus under 2nd MPJ</Checkbox></Col>
+                                <Col span={12}><Checkbox value="CALLUS_UNDER_3RD_MPJ">Callus under 3rd MPJ</Checkbox></Col>
+                                <Col span={12}><Checkbox value="CALLUSES_LATERAL_BORDER_OF_FOOT">Calluses lateral border of foot</Checkbox></Col>
+                                <Col span={12}><Checkbox value="CALLUSES_MEDIAL_BORDER_OF_HALLUX">Calluses medial border of hallux</Checkbox></Col>
+                                <Col span={12}><Checkbox value="HAMMER_TOE">Hammer toe</Checkbox></Col>
+                                <Col span={12}><Checkbox value="HAV">HAV</Checkbox></Col>
+                                <Col span={12}><Checkbox value="HAV_MILD">HAV (Mild)</Checkbox></Col>
+                                <Col span={12}><Checkbox value="LEFT_HIP_LOWER_THAN_RIGHT">Left hip lower than right</Checkbox></Col>
+                                <Col span={12}><Checkbox value="LIMITED">Limited</Checkbox></Col>
+                                <Col span={12}><Checkbox value="NORMAL">Normal</Checkbox></Col>
+                                <Col span={12}><Checkbox value="RIGHT_HIP_LOWER_THAN_LEFT">Right hip lower than left</Checkbox></Col>
+                                <Col span={12}><Checkbox value="SLIGHTY_LIMITED">Slightly limited</Checkbox></Col>
+                            </Row>
+                        </Checkbox.Group>
+                        <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} autosize />
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Supplied"
+                    >
+                        <Checkbox.Group style={{ width: '100%' }} value={this.state.supplied} onChange={this.handleSuppliedChange}>
+                            <Row>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_BLUE">Formthotics Blue</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_3_4_DD_BLUE">Formthotics 3/4 DD Blue</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_DD_BLUE">Formthotics DD Blue</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_RED">Formthotics Red</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_DD_RED">Formthotics DD Red</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_DD_RED_LP">Formthotics DD Red/LP</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_SHOCK_STOP">Formthotics Shock Stop</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_BURGUNDY">Formthotics Burgundy</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_LV_BLACK">Formthotics LV Black</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_LV_GOLF">Formthotics LV Golf</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_BLACK">Formthotics Black</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_GOLF">Formthotics Golf</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J1">Formthotics Junior J1</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J2">Formthotics Junior J2</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J3">Formthotics Junior J3</Checkbox></Col>
+                                <Col span={12}><Checkbox value="FORMTHOTICS_JUNIOR_J4">Formthotics Junior J4</Checkbox></Col>
+                                <Col span={12}><Checkbox value="EXPRESS_FL_RED">Express FL Red</Checkbox></Col>
+                                <Col span={12}><Checkbox value="EXPRESS_FL_BLUE">Express FL Blue</Checkbox></Col>
+                                <Col span={12}><Checkbox value="EXPRESS_3_4_RED">Express 3/4 Red</Checkbox></Col>
+                                <Col span={12}><Checkbox value="EXPRESS_3_4_BLUE">Express 3/4 Blue</Checkbox></Col>
+                                <Col span={12}><Checkbox value="COMFORT_3_4_CHARCOAL">Comfort 3/4 Charcoal</Checkbox></Col>
+                                <Col span={12}><Checkbox value="RUBBER_3_4_INSOLES">Rubber 3/4 Insoles</Checkbox></Col>
+                                <Col span={12}><Checkbox value="SILIPOS_WONDERSPUR">Silipos WonderSpur</Checkbox></Col>
+                                <Col span={12}><Checkbox value="SILIPOS_WONDERCUP">Silipos WonderCup</Checkbox></Col>
+                                <Col span={12}><Checkbox value="SILIPOS_WONDERSPORT">Silipos WonderSport</Checkbox></Col>
+                            </Row>
+                        </Checkbox.Group>
+                        <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} autosize />
+                    </Form.Item>
+                    <Form.Item>
+                        <Link to='/patients'><Button>Back</Button></Link>
+                        <Button type="primary" htmlType="submit" className='save-button'>Save</Button>
+                    </Form.Item>
+                </Form>
+            </div>
         );
     }
 }

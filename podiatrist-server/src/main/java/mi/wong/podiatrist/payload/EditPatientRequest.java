@@ -12,6 +12,8 @@ public class EditPatientRequest {
 
     private Long pid;
 
+    private String imageUrl;
+
     @NotBlank
     private String name;
 
@@ -51,6 +53,14 @@ public class EditPatientRequest {
 
     public void setPid(Long pid) {
         this.pid = pid;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {

@@ -2,9 +2,7 @@ package mi.wong.podiatrist.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "patients")
@@ -14,6 +12,10 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long pid;
+
+    // Patient Image
+    @Lob
+    private String imageUrl;
 
     // Patient Details
     private String name;
@@ -76,6 +78,14 @@ public class Patient {
 
     public void setPid(Long pid) {
         this.pid = pid;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
