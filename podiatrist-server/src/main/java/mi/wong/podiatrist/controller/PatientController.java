@@ -98,6 +98,7 @@ public class PatientController {
             problems.add(problemRepository.findByName(ProblemName.valueOf(problemName)).get());
         }
         patient.setProblems(problems);
+        patient.setAdditionalProblems(editPatientRequest.getAdditionalProblems());
         patientRepository.save(patient);
         return ResponseEntity.ok(new ApiResponse(true, "Patient " + editPatientRequest.getName()+ " updated!"));
     }

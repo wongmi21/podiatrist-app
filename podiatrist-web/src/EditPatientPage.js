@@ -20,6 +20,14 @@ function formatDate(date) {
     return [year, month, day].join('');
 }
 
+function yyyymmddToMoment(yyyymmdd) {
+    if (yyyymmdd) {
+        return moment(String(yyyymmdd).replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'), 'YYYY-MM-DD');
+    } else {
+        return null;
+    }
+}
+
 class EditPatientPage extends React.Component {
 
     constructor(props) {
@@ -39,7 +47,8 @@ class EditPatientPage extends React.Component {
             height: null,
             weight: null,
             shoeSize: null,
-            problems: []
+            problems: [],
+            additionalProblems: null
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -64,7 +73,8 @@ class EditPatientPage extends React.Component {
                     occupation: response.occupation,
                     height: response.height,
                     weight: response.weight,
-                    shoeSize: response.shoeSize
+                    shoeSize: response.shoeSize,
+                    additionalProblems: response.additionalProblems
                 });
                 let problems = [];
                 for (const problem of response.problems) {
@@ -85,7 +95,7 @@ class EditPatientPage extends React.Component {
         if (e) {
             this.setState({dateOfBirth: formatDate(e._d)});
         } else {
-            this.setState({dateOfBirth: 20000101});
+            this.setState({dateOfBirth: null});
         }
     }
 
@@ -110,7 +120,8 @@ class EditPatientPage extends React.Component {
             height: this.state.height,
             weight: this.state.weight,
             shoeSize: this.state.shoeSize,
-            problems: this.state.problems
+            problems: this.state.problems,
+            additionalProblems: this.state.additionalProblems
         })
             .then(response => {
                 notification.success({
@@ -169,7 +180,7 @@ class EditPatientPage extends React.Component {
                     {...formItemLayout}
                     label="Date of Birth"
                 >
-                    <DatePicker value={moment(String(this.state.dateOfBirth).replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'), 'YYYY-MM-DD')} onChange={this.handleDateChange}/>
+                    <DatePicker value={yyyymmddToMoment(this.state.dateOfBirth)} onChange={this.handleDateChange}/>
                 </Form.Item>
                 <Form.Item
                     {...formItemLayout}
@@ -237,6 +248,7 @@ class EditPatientPage extends React.Component {
                             <Col span={12}><Checkbox value="METATARSALGIA">Metatarsalgia</Checkbox></Col>
                         </Row>
                     </Checkbox.Group>
+                    <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} autosize />
                 </Form.Item>
                 <Form.Item>
                     <Link to='/patients'><Button>Back</Button></Link>

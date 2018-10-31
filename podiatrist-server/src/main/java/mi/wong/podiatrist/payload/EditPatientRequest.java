@@ -3,9 +3,7 @@ package mi.wong.podiatrist.payload;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class EditPatientRequest {
 
@@ -32,8 +30,8 @@ public class EditPatientRequest {
     private Integer height;
     private Integer weight;
     private Double shoeSize;
-
     private List<String> problems = new ArrayList<>();
+    private String additionalProblems;
 
     public Long getId() {
         return id;
@@ -153,5 +151,13 @@ public class EditPatientRequest {
 
     public void setProblems(List<String> problems) {
         this.problems = problems;
+    }
+
+    public String getAdditionalProblems() {
+        return additionalProblems;
+    }
+
+    public void setAdditionalProblems(String additionalProblems) {
+        this.additionalProblems = additionalProblems;
     }
 }

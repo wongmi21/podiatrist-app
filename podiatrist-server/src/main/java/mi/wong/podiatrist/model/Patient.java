@@ -35,6 +35,8 @@ public class Patient {
             inverseJoinColumns = @JoinColumn(name = "problem_id"))
     private List<Problem> problems = new ArrayList<>();
 
+    private String additionalProblems;
+
     public Patient() {
     }
 
@@ -162,5 +164,13 @@ public class Patient {
 
     public void setProblems(List<Problem> problems) {
         this.problems = problems;
+    }
+
+    public String getAdditionalProblems() {
+        return additionalProblems;
+    }
+
+    public void setAdditionalProblems(String additionalProblems) {
+        this.additionalProblems = additionalProblems;
     }
 }
