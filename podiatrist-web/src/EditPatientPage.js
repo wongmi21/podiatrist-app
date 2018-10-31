@@ -7,6 +7,7 @@ import {editPatient, getPatientData} from "./util/APIUtils";
 
 import './css/EditPatientPage.css';
 import moment from "moment";
+import SymptomsTable from "./SymptomsTable";
 
 function formatDate(date) {
     var d = new Date(date),
@@ -206,7 +207,7 @@ class EditPatientPage extends React.Component {
                 sm: { span: 4 }
             },
             wrapperCol: {
-                sm: { span: 12 }
+                sm: { span: 16 }
             }
         };
 
@@ -393,6 +394,12 @@ class EditPatientPage extends React.Component {
                             </Row>
                         </Checkbox.Group>
                         <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Symptoms"
+                    >
+                        <SymptomsTable/>
                     </Form.Item>
                     <Form.Item>
                         <Link to='/patients'><Button>Back</Button></Link>
