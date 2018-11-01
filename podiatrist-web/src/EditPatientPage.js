@@ -1,15 +1,16 @@
 import React from 'react';
 
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {Button, Input, Form, DatePicker, Row, Col, Checkbox, Upload, Icon, message} from "antd";
+import {Input, Form, DatePicker, Row, Col, Checkbox, Upload, Icon, message} from "antd";
 import {editPatient, getPatientData} from "./util/APIUtils";
 
 import './css/EditPatientPage.css';
 import moment from "moment";
 import SymptomsTable from "./SymptomsTable";
 import TestResultsTable from "./TestResultsTable";
-import EditPatientInput from "./EditPatientInput";
+import EditPatientTextBox from "./EditPatientTextBox";
+import EditPatientTextArea from "./EditPatientTextArea";
 
 function formatDate(date) {
     var d = new Date(date),
@@ -478,25 +479,25 @@ class EditPatientPage extends React.Component {
                         {...formItemLayout}
                         label="Patient ID"
                     >
-                        <EditPatientInput name='pid' initialValue={this.state.pid} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='pid' initialValue={this.state.pid} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Name"
                     >
-                        <EditPatientInput name='name' initialValue={this.state.name} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='name' initialValue={this.state.name} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="NRIC"
                     >
-                        <EditPatientInput name='nric' initialValue={this.state.nric} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='nric' initialValue={this.state.nric} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Sex"
                     >
-                        <EditPatientInput name='sex' initialValue={this.state.sex} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='sex' initialValue={this.state.sex} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -508,49 +509,49 @@ class EditPatientPage extends React.Component {
                         {...formItemLayout}
                         label="Phone Number"
                     >
-                        <EditPatientInput name='phoneNumber' initialValue={this.state.phoneNumber} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='phoneNumber' initialValue={this.state.phoneNumber} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="E-mail"
                     >
-                        <EditPatientInput name='email' initialValue={this.state.email} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='email' initialValue={this.state.email} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Address"
                     >
-                        <EditPatientInput name='address' initialValue={this.state.address} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='address' initialValue={this.state.address} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Postal Code"
                     >
-                        <EditPatientInput name='postalCode' initialValue={this.state.postalCode} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='postalCode' initialValue={this.state.postalCode} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Occupation"
                     >
-                        <EditPatientInput name='occupation' initialValue={this.state.occupation} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='occupation' initialValue={this.state.occupation} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Height (cm)"
                     >
-                        <EditPatientInput name='height' initialValue={this.state.height} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='height' initialValue={this.state.height} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Weight (kg)"
                     >
-                        <EditPatientInput name='weight' initialValue={this.state.weight} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='weight' initialValue={this.state.weight} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Shoe Size"
                     >
-                        <EditPatientInput name='shoeSize' initialValue={this.state.shoeSize} onBlur={this.handleBlur} />
+                        <EditPatientTextBox name='shoeSize' initialValue={this.state.shoeSize} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -570,7 +571,7 @@ class EditPatientPage extends React.Component {
                                 <Col span={12}><Checkbox value="METATARSALGIA">Metatarsalgia</Checkbox></Col>
                             </Row>
                         </Checkbox.Group>
-                        <Input.TextArea placeholder="Any additional problems" name='additionalProblems' value={this.state.additionalProblems} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
+                        <EditPatientTextArea name='additionalProblems' placeholder='Any additional problems' initialValue={this.state.additionalProblems} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -593,7 +594,7 @@ class EditPatientPage extends React.Component {
                                 <Col span={12}><Checkbox value="SLIGHTY_LIMITED">Slightly limited</Checkbox></Col>
                             </Row>
                         </Checkbox.Group>
-                        <Input.TextArea placeholder="Any other significant findings" name='additionalOtherSignificantFindings' value={this.state.additionalOtherSignificantFindings} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
+                        <EditPatientTextArea name='additionalOtherSignificantFindings' placeholder='Any other significant findings' initialValue={this.state.additionalOtherSignificantFindings} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -628,7 +629,7 @@ class EditPatientPage extends React.Component {
                                 <Col span={12}><Checkbox value="SILIPOS_WONDERSPORT">Silipos WonderSport</Checkbox></Col>
                             </Row>
                         </Checkbox.Group>
-                        <Input.TextArea placeholder="Any additional supplied" name='additionalSupplied' value={this.state.additionalSupplied} onChange={this.handleInputChange} onBlur={this.handleInputBlur} autosize />
+                        <EditPatientTextArea name='additionalSupplied' placeholder='Any additional supplied' initialValue={this.state.additionalSupplied} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -646,7 +647,7 @@ class EditPatientPage extends React.Component {
                         {...formItemLayout}
                         label="Additional Notes"
                     >
-                        <Input.TextArea rows={4} name='additionalNotes' value={this.state.additionalNotes} onChange={this.handleInputChange} onBlur={this.handleInputBlur} />
+                        <EditPatientTextArea name='additionalNotes' placeholder='Any additional notes' initialValue={this.state.additionalNotes} onBlur={this.handleBlur} />
                     </Form.Item>
                 </Form>
             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Input} from "antd";
 
-class EditPatientInput extends React.Component {
+class EditPatientTextArea extends React.Component {
 
     constructor(props) {
         super(props);
@@ -30,9 +30,9 @@ class EditPatientInput extends React.Component {
 
     render() {
         return (
-            <Input name={this.props.name} value={this.state.value} onChange={this.handleChange} onBlur={this.handleBlur}/>
+            <Input.TextArea placeholder={this.props.placeholder} name={this.props.name} value={this.state.value} onChange={this.handleChange} onBlur={this.handleBlur} autosize />
         );
     }
 }
 
-export default EditPatientInput;
+export default EditPatientTextArea;
