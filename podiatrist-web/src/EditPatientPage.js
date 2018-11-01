@@ -240,7 +240,6 @@ class EditPatientPage extends React.Component {
             .then(response => {
                 this.setState({
                     imageUrl: response.imageUrl,
-
                     id: response.id,
                     pid: response.pid,
                     name: response.name,
@@ -317,8 +316,29 @@ class EditPatientPage extends React.Component {
         this.setState({symptomsData: data});
         editPatient({
             id: this.state.id,
+            pid: this.state.pid,
+            name: this.state.name,
             nric: this.state.nric,
-            symptomsData: JSON.stringify(data)
+            sex: this.state.sex,
+            dateOfBirth: this.state.dateOfBirth,
+            phoneNumber: this.state.phoneNumber,
+            email: this.state.email,
+            address: this.state.address,
+            postalCode: this.state.postalCode,
+            occupation: this.state.occupation,
+            height: this.state.height,
+            weight: this.state.weight,
+            shoeSize: this.state.shoeSize,
+            problems: this.state.problems,
+            additionalProblems: this.state.additionalProblems,
+            otherSignificantFindings: this.state.otherSignificantFindings,
+            additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings,
+            supplied: this.state.supplied,
+            additionalSupplied: this.state.additionalSupplied,
+            additionalNotes: this.state.additionalNotes,
+            imageUrl: this.state.imageUrl,
+            symptomsData: JSON.stringify(this.state.symptomsData),
+            testResultsData: JSON.stringify(data)
         })
             .then(response => {
             })
@@ -331,7 +351,28 @@ class EditPatientPage extends React.Component {
         this.setState({testResultsData: data});
         editPatient({
             id: this.state.id,
+            pid: this.state.pid,
+            name: this.state.name,
             nric: this.state.nric,
+            sex: this.state.sex,
+            dateOfBirth: this.state.dateOfBirth,
+            phoneNumber: this.state.phoneNumber,
+            email: this.state.email,
+            address: this.state.address,
+            postalCode: this.state.postalCode,
+            occupation: this.state.occupation,
+            height: this.state.height,
+            weight: this.state.weight,
+            shoeSize: this.state.shoeSize,
+            problems: this.state.problems,
+            additionalProblems: this.state.additionalProblems,
+            otherSignificantFindings: this.state.otherSignificantFindings,
+            additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings,
+            supplied: this.state.supplied,
+            additionalSupplied: this.state.additionalSupplied,
+            additionalNotes: this.state.additionalNotes,
+            imageUrl: this.state.imageUrl,
+            symptomsData: JSON.stringify(this.state.symptomsData),
             testResultsData: JSON.stringify(data)
         })
             .then(response => {
@@ -364,7 +405,6 @@ class EditPatientPage extends React.Component {
             supplied: this.state.supplied,
             additionalSupplied: this.state.additionalSupplied,
             additionalNotes: this.state.additionalNotes,
-
             imageUrl: this.state.imageUrl
         })
             .then(response => {
