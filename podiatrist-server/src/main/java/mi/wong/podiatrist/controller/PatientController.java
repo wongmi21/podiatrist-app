@@ -121,6 +121,7 @@ public class PatientController {
         patient.setSupplied(supplied);
         patient.setAdditionalSupplied(editPatientRequest.getAdditionalSupplied());
         patient.setSymptomsData(editPatientRequest.getSymptomsData());
+        patient.setTestResultsData(editPatientRequest.getTestResultsData());
         patientRepository.save(patient);
         return ResponseEntity.ok(new ApiResponse(true, "Patient " + editPatientRequest.getName()+ " updated!"));
     }

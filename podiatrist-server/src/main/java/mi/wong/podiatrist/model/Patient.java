@@ -58,6 +58,9 @@ public class Patient {
     @Lob
     private String symptomsData;
 
+    @Lob
+    private String testResultsData;
+
     public Patient() {
     }
 
@@ -241,5 +244,13 @@ public class Patient {
 
     public void setSymptomsData(String symptomsData) {
         this.symptomsData = symptomsData;
+    }
+
+    public String getTestResultsData() {
+        return testResultsData;
+    }
+
+    public void setTestResultsData(String testResultsData) {
+        this.testResultsData = testResultsData;
     }
 }

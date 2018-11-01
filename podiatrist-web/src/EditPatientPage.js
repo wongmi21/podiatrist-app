@@ -2,12 +2,13 @@ import React from 'react';
 
 import {Link, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {notification, Button, Input, Form, DatePicker, Row, Col, Checkbox, Upload, Icon, message} from "antd";
+import {Button, Input, Form, DatePicker, Row, Col, Checkbox, Upload, Icon, message} from "antd";
 import {editPatient, getPatientData} from "./util/APIUtils";
 
 import './css/EditPatientPage.css';
 import moment from "moment";
 import SymptomsTable from "./SymptomsTable";
+import TestResultsTable from "./TestResultsTable";
 
 function formatDate(date) {
     var d = new Date(date),
@@ -75,7 +76,153 @@ class EditPatientPage extends React.Component {
             additionalOtherSignificantFindings: null,
             supplied: [],
             additionalSupplied: null,
-            symptomsData: []
+            symptomsData: [],
+            testResultsData: [
+                {
+                    key: 0,
+                    test: 'Relax Stance - Legs',
+                    result: '-',
+                    ideal: 'Straight'
+                },
+                {
+                    key: 1,
+                    test: 'Relax Stance - Patallae',
+                    result: '-',
+                    ideal: 'Straight'
+                },
+                {
+                    key: 2,
+                    test: 'Gait - Right Foot',
+                    result: '-',
+                    ideal: 'Straight/Parallel'
+                },
+                {
+                    key: 3,
+                    test: 'Gait - Left Foot',
+                    result: '-',
+                    ideal: 'Straight/Parallel'
+                },
+                {
+                    key: 4,
+                    test: 'Knees Bending - Right',
+                    result: '-',
+                    ideal: 'On 2nd Toe'
+                },
+                {
+                    key: 5,
+                    test: 'Knees Bending - Left',
+                    result: '-',
+                    ideal: 'On 2nd Toe'
+                },
+                {
+                    key: 6,
+                    test: 'Arches(Non Wt) - Right',
+                    result: '-',
+                    ideal: 'Medium'
+                },
+                {
+                    key: 7,
+                    test: 'Arches(Non Wt) - Left',
+                    result: '-',
+                    ideal: 'Medium'
+                },
+                {
+                    key: 8,
+                    test: 'Arches(Wt) - Right',
+                    result: '-',
+                    ideal: 'Medium'
+                },
+                {
+                    key: 9,
+                    test: 'Arches(Wt) - Left',
+                    result: '-',
+                    ideal: 'Medium'
+                },
+                {
+                    key: 10,
+                    test: 'Forefoot(Non Wt) - Right',
+                    result: '-',
+                    ideal: 'Neutral(Horizontal)'
+                },
+                {
+                    key: 11,
+                    test: 'Forefoot(Non Wt) - Left',
+                    result: '-',
+                    ideal: 'Neutral(Horizontal)'
+                },
+                {
+                    key: 12,
+                    test: 'Rear(Wt) - Right',
+                    result: '-',
+                    ideal: 'Neutral(Vertical)'
+                },
+                {
+                    key: 13,
+                    test: 'Rear(Wt) - Left',
+                    result: '-',
+                    ideal: 'Neutral(Vertical)'
+                },
+                {
+                    key: 14,
+                    test: "Jack's Test - Right",
+                    result: '-',
+                    ideal: '1-2'
+                },
+                {
+                    key: 15,
+                    test: "Jack's Test - Left",
+                    result: '-',
+                    ideal: '1-2'
+                },
+                {
+                    key: 16,
+                    test: "Supination - Right",
+                    result: '-',
+                    ideal: '1-2'
+                },
+                {
+                    key: 17,
+                    test: "Supination - Left",
+                    result: '-',
+                    ideal: '1-2'
+                },
+                {
+                    key: 18,
+                    test: "Subtalar Motion - Right",
+                    result: '-',
+                    ideal: 'Normal ROM'
+                },
+                {
+                    key: 19,
+                    test: "Subtalar Motion - Left",
+                    result: '-',
+                    ideal: 'Normal ROM'
+                },
+                {
+                    key: 20,
+                    test: "One Foot Balance - Right",
+                    result: '-',
+                    ideal: 'Steady'
+                },
+                {
+                    key: 21,
+                    test: "One Foot Balance - Left",
+                    result: '-',
+                    ideal: 'Steady'
+                },
+                {
+                    key: 22,
+                    test: "Forefoot Stability - Right",
+                    result: '-',
+                    ideal: 'Steady'
+                },
+                {
+                    key: 23,
+                    test: "Forefoot Stability - Right",
+                    result: '-',
+                    ideal: 'Steady'
+                }
+            ]
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -84,6 +231,7 @@ class EditPatientPage extends React.Component {
         this.handleSuppliedChange = this.handleSuppliedChange.bind(this);
         this.handleInputBlur = this.handleInputBlur.bind(this);
         this.handleSymptomsTableUpdated = this.handleSymptomsTableUpdated.bind(this);
+        this.handleTestResultsTableUpdated = this.handleTestResultsTableUpdated.bind(this);
     }
 
     componentDidMount() {
@@ -109,8 +257,11 @@ class EditPatientPage extends React.Component {
                     additionalProblems: response.additionalProblems,
                     additionalOtherSignificantFindings: response.additionalOtherSignificantFindings,
                     additionalSupplied: response.additionalSupplied,
-                    symptomsData: JSON.parse(response.symptomsData)
+                    symptomsData: JSON.parse(response.symptomsData),
                 });
+                if (response.testResultsData) {
+                    this.setState({ testResultsData: JSON.parse(response.testResultsData) });
+                }
                 let problems = [];
                 for (const problem of response.problems) {
                     problems.push(problem.name);
@@ -164,6 +315,20 @@ class EditPatientPage extends React.Component {
             id: this.state.id,
             nric: this.state.nric,
             symptomsData: JSON.stringify(data)
+        })
+            .then(response => {
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    handleTestResultsTableUpdated(data) {
+        this.setState({testResultsData: data});
+        editPatient({
+            id: this.state.id,
+            nric: this.state.nric,
+            testResultsData: JSON.stringify(data)
         })
             .then(response => {
             })
@@ -417,6 +582,12 @@ class EditPatientPage extends React.Component {
                         label="Symptoms"
                     >
                         <SymptomsTable onChange={this.handleSymptomsTableUpdated} dataSource={this.state.symptomsData} />
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Test Results"
+                    >
+                        <TestResultsTable onChange={this.handleTestResultsTableUpdated} dataSource={this.state.testResultsData} />
                     </Form.Item>
                     <Form.Item>
                         <Link to='/patients'><Button>Back</Button></Link>
