@@ -9,6 +9,7 @@ import './css/EditPatientPage.css';
 import moment from "moment";
 import SymptomsTable from "./SymptomsTable";
 import TestResultsTable from "./TestResultsTable";
+import EditPatientInput from "./EditPatientInput";
 
 function formatDate(date) {
     var d = new Date(date),
@@ -230,6 +231,7 @@ class EditPatientPage extends React.Component {
         this.handleProblemsChange = this.handleProblemsChange.bind(this);
         this.handleOtherSignificantFindingsChange = this.handleOtherSignificantFindingsChange.bind(this);
         this.handleSuppliedChange = this.handleSuppliedChange.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
         this.handleInputBlur = this.handleInputBlur.bind(this);
         this.handleSymptomsTableUpdated = this.handleSymptomsTableUpdated.bind(this);
         this.handleTestResultsTableUpdated = this.handleTestResultsTableUpdated.bind(this);
@@ -337,8 +339,8 @@ class EditPatientPage extends React.Component {
             additionalSupplied: this.state.additionalSupplied,
             additionalNotes: this.state.additionalNotes,
             imageUrl: this.state.imageUrl,
-            symptomsData: JSON.stringify(this.state.symptomsData),
-            testResultsData: JSON.stringify(data)
+            symptomsData: JSON.stringify(data),
+            testResultsData: JSON.stringify(this.state.testResultsData)
         })
             .then(response => {
             })
@@ -380,6 +382,12 @@ class EditPatientPage extends React.Component {
             .catch(error => {
                 console.log(error);
             })
+    }
+
+    handleBlur(name, value) {
+        this.setState({
+            [name]: value
+        }, this.handleInputBlur);
     }
 
     handleInputBlur() {
@@ -470,25 +478,25 @@ class EditPatientPage extends React.Component {
                         {...formItemLayout}
                         label="Patient ID"
                     >
-                        <Input name='pid' value={this.state.pid} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='pid' initialValue={this.state.pid} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Name"
                     >
-                        <Input name='name' value={this.state.name} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='name' initialValue={this.state.name} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="NRIC"
                     >
-                        <Input name='nric' value={this.state.nric} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='nric' initialValue={this.state.nric} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Sex"
                     >
-                        <Input name='sex' value={this.state.sex} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='sex' initialValue={this.state.sex} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
@@ -500,49 +508,49 @@ class EditPatientPage extends React.Component {
                         {...formItemLayout}
                         label="Phone Number"
                     >
-                        <Input name='phoneNumber' value={this.state.phoneNumber} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='phoneNumber' initialValue={this.state.phoneNumber} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="E-mail"
                     >
-                        <Input name='email' value={this.state.email} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='email' initialValue={this.state.email} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Address"
                     >
-                        <Input name='address' value={this.state.address} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='address' initialValue={this.state.address} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Postal Code"
                     >
-                        <Input name='postalCode' value={this.state.postalCode} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='postalCode' initialValue={this.state.postalCode} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Occupation"
                     >
-                        <Input name='occupation' value={this.state.occupation} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='occupation' initialValue={this.state.occupation} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Height (cm)"
                     >
-                        <Input name='height' value={this.state.height} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='height' initialValue={this.state.height} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Weight (kg)"
                     >
-                        <Input name='weight' value={this.state.weight} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='weight' initialValue={this.state.weight} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
                         label="Shoe Size"
                     >
-                        <Input name='shoeSize' value={this.state.shoeSize} onChange={this.handleInputChange} onBlur={this.handleInputBlur}/>
+                        <EditPatientInput name='shoeSize' initialValue={this.state.shoeSize} onBlur={this.handleBlur} />
                     </Form.Item>
                     <Form.Item
                         {...formItemLayout}
