@@ -258,9 +258,11 @@ class EditPatientPage extends React.Component {
                     additionalProblems: response.additionalProblems,
                     additionalOtherSignificantFindings: response.additionalOtherSignificantFindings,
                     additionalSupplied: response.additionalSupplied,
-                    symptomsData: JSON.parse(response.symptomsData),
                     additionalNotes: response.additionalNotes
                 });
+                if (response.symptomsData) {
+                    this.setState({symptomsData: JSON.parse(response.symptomsData)});
+                }
                 if (response.testResultsData) {
                     this.setState({ testResultsData: JSON.parse(response.testResultsData) });
                 }

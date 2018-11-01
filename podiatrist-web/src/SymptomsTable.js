@@ -146,10 +146,6 @@ class SymptomsTable extends React.Component {
                 );
             },
         }];
-
-        this.state = {
-            count: 0,
-        };
     }
 
     handleDelete = (key) => {
@@ -159,17 +155,18 @@ class SymptomsTable extends React.Component {
     }
 
     handleAdd = () => {
-        const { count } = this.state;
+        let lastKey = 0;
+        const lastRecord = this.props.dataSource[this.props.dataSource.length - 1];
+        if (lastRecord) {
+            lastKey = lastRecord.key
+        }
         const newData = {
-            key: count,
+            key: lastKey + 1,
             anatomy: '-',
             sensation: '-',
             duration: '-',
             notes: '-'
         };
-        this.setState({
-            count: count + 1,
-        });
         this.props.onChange([...this.props.dataSource, newData]);
     }
 
