@@ -32,6 +32,7 @@ public class EditPatientRequest {
     private String additionalSupplied;
     private String symptomsData;
     private String testResultsData;
+    private String additionalNotes;
 
     public Long getId() {
         return id;
@@ -215,5 +216,13 @@ public class EditPatientRequest {
 
     public void setTestResultsData(String testResultsData) {
         this.testResultsData = testResultsData;
+    }
+
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+
+    public void setAdditionalNotes(String additionalNotes) {
+        this.additionalNotes = additionalNotes;
     }
 }

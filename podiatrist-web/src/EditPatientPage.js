@@ -77,6 +77,7 @@ class EditPatientPage extends React.Component {
             supplied: [],
             additionalSupplied: null,
             symptomsData: [],
+            additionalNotes: null,
             testResultsData: [
                 {
                     key: 0,
@@ -258,6 +259,7 @@ class EditPatientPage extends React.Component {
                     additionalOtherSignificantFindings: response.additionalOtherSignificantFindings,
                     additionalSupplied: response.additionalSupplied,
                     symptomsData: JSON.parse(response.symptomsData),
+                    additionalNotes: response.additionalNotes
                 });
                 if (response.testResultsData) {
                     this.setState({ testResultsData: JSON.parse(response.testResultsData) });
@@ -359,6 +361,7 @@ class EditPatientPage extends React.Component {
             additionalOtherSignificantFindings: this.state.additionalOtherSignificantFindings,
             supplied: this.state.supplied,
             additionalSupplied: this.state.additionalSupplied,
+            additionalNotes: this.state.additionalNotes,
 
             imageUrl: this.state.imageUrl
         })
@@ -589,9 +592,11 @@ class EditPatientPage extends React.Component {
                     >
                         <TestResultsTable onChange={this.handleTestResultsTableUpdated} dataSource={this.state.testResultsData} />
                     </Form.Item>
-                    <Form.Item>
-                        <Link to='/patients'><Button>Back</Button></Link>
-                        <Button type="primary" htmlType="submit" className='save-button'>Save</Button>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="Additional Notes"
+                    >
+                        <Input.TextArea rows={4} name='additionalNotes' value={this.state.additionalNotes} onChange={this.handleInputChange} onBlur={this.handleInputBlur} />
                     </Form.Item>
                 </Form>
             </div>

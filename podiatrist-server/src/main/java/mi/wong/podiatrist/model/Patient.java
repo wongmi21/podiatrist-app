@@ -61,6 +61,9 @@ public class Patient {
     @Lob
     private String testResultsData;
 
+    @Lob
+    private String additionalNotes;
+
     public Patient() {
     }
 
@@ -252,5 +255,13 @@ public class Patient {
 
     public void setTestResultsData(String testResultsData) {
         this.testResultsData = testResultsData;
+    }
+
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+
+    public void setAdditionalNotes(String additionalNotes) {
+        this.additionalNotes = additionalNotes;
     }
 }
