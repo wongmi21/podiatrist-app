@@ -1,14 +1,13 @@
 package mi.wong.podiatrist.payload;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class DeletePatientRequest {
 
-    @NotBlank
-    private String name;
+    @NotNull
+    private Long id;
 
-    @NotBlank
-    private String nric;
+    private String name;
 
     public String getName() {
         return name;
@@ -18,11 +17,11 @@ public class DeletePatientRequest {
         this.name = name;
     }
 
-    public String getNric() {
-        return nric;
+    public Long getId() {
+        return id;
     }
 
-    public void setNric(String nric) {
-        this.nric = nric;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -48,20 +48,16 @@ public class PatientController {
 
     @PostMapping("/patient/add")
     public ResponseEntity<?> addPatient(@Valid @RequestBody AddPatientRequest addPatientRequest) {
-        boolean alreadyExists = patientRepository.findByNric(addPatientRequest.getNric()).isPresent();
-        if (alreadyExists) {
-            return new ResponseEntity(new ApiResponse(false, "There already exists a patient with the same NRIC!"), HttpStatus.BAD_REQUEST);
-        }
         patientRepository.save(new Patient(addPatientRequest.getName(), addPatientRequest.getNric(), addPatientRequest.getSex()));
         return ResponseEntity.ok(new ApiResponse(true, "Patient added!"));
     }
 
     @PostMapping("/patient/delete")
     public ResponseEntity<?> deletePatient(@Valid @RequestBody DeletePatientRequest deletePatientRequest) {
-        Optional<Patient> optionalPatient = patientRepository.findByNric(deletePatientRequest.getNric());
+        Optional<Patient> optionalPatient = patientRepository.findById(deletePatientRequest.getId());
         if (optionalPatient.isPresent()) {
             patientRepository.delete(optionalPatient.get());
-            return ResponseEntity.ok(new ApiResponse(true, "Patient " + deletePatientRequest.getName() + "(" + deletePatientRequest.getNric() + ") deleted!"));
+            return ResponseEntity.ok(new ApiResponse(true, "Patient " + deletePatientRequest.getName() + "(ID: " + deletePatientRequest.getId() + ") deleted!"));
         } else {
             return new ResponseEntity(new ApiResponse(false, "Patient cannot be deleted"), HttpStatus.BAD_REQUEST);
         }
@@ -74,18 +70,7 @@ public class PatientController {
 
     @PostMapping("/patient/edit")
     public ResponseEntity<?> editPatient(@Valid @RequestBody EditPatientRequest editPatientRequest) {
-        Optional<Patient> optionalNricAlreadyExistsPatient = patientRepository.findByNric(editPatientRequest.getNric());
-        boolean nricAlreadyExists = optionalNricAlreadyExistsPatient.isPresent();
-        Patient patient;
-        if (nricAlreadyExists) {
-            Patient nricAlreadyExistsPatient = optionalNricAlreadyExistsPatient.get();
-            if (!nricAlreadyExistsPatient.getId().equals(editPatientRequest.getId())) {
-                return new ResponseEntity(new ApiResponse(false, "There already exists a patient with the same NRIC!"), HttpStatus.BAD_REQUEST);
-            }
-            patient = nricAlreadyExistsPatient;
-        } else {
-            patient = patientRepository.findById(editPatientRequest.getId()).get();
-        }
+        Patient patient = patientRepository.findById(editPatientRequest.getId()).get();
 
         patient.setImageUrl(editPatientRequest.getImageUrl());
 

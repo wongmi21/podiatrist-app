@@ -88,10 +88,9 @@ class ListPatientsPage extends React.Component {
         this.setState({ searchText: '' });
     };
 
-    handleDelete = (key, name, nric) => {
-        deletePatient({name: name, nric: nric})
+    handleDelete = (key, id, name, nric) => {
+        deletePatient({name: name, id: id})
             .then(response => {
-                console.log(response);
                 notification.success({
                     message: 'Podiatrist App',
                     description: response.message,
@@ -196,7 +195,7 @@ class ListPatientsPage extends React.Component {
                 <span>
                   <Link to={'/patients/' + record.key}>Edit</Link>
                   <Divider type="vertical" />
-                  <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key, record.name, record.nric)}>
+                  <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key, record.id, record.name, record.nric)}>
                     <a href="javascript:;">Delete</a>
                   </Popconfirm>
                 </span>
