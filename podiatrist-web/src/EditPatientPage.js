@@ -166,7 +166,6 @@ class EditPatientPage extends React.Component {
             symptomsData: JSON.stringify(data)
         })
             .then(response => {
-                console.log(response);
             })
             .catch(error => {
                 console.log(error);

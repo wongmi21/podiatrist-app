@@ -53,6 +53,10 @@ class EditableCell extends React.Component {
                 return;
             }
             this.toggleEdit();
+            let value = values[Object.keys(values)[0]];
+            if (value === '') {
+                values[Object.keys(values)[0]] = '-';
+            }
             handleSave({ ...record, ...values });
         });
     }
@@ -79,7 +83,7 @@ class EditableCell extends React.Component {
                                     <FormItem style={{ margin: 0 }}>
                                         {form.getFieldDecorator(dataIndex, {
                                             rules: [{
-                                                required: true,
+                                                required: false,
                                                 message: `${title} is required.`,
                                             }],
                                             initialValue: record[dataIndex],
@@ -158,10 +162,10 @@ class SymptomsTable extends React.Component {
         const { count } = this.state;
         const newData = {
             key: count,
-            anatomy: 'Click to edit',
-            sensation: 'Click to edit',
-            duration: 'Click to edit',
-            notes: 'Click to edit'
+            anatomy: '-',
+            sensation: '-',
+            duration: '-',
+            notes: '-'
         };
         this.setState({
             count: count + 1,
@@ -204,9 +208,6 @@ class SymptomsTable extends React.Component {
         });
         return (
             <div>
-                <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                    Add Symptom
-                </Button>
                 <Table
                     components={components}
                     rowClassName={() => 'editable-row'}
@@ -216,6 +217,9 @@ class SymptomsTable extends React.Component {
                     size='middle'
                     pagination={false}
                 />
+                <Button onClick={this.handleAdd} type="primary" style={{ marginTop: 16 }}>
+                    Add Symptom
+                </Button>
             </div>
         );
     }
